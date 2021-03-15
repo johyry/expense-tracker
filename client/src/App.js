@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Switch, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Notification from './components/Notification'
 import LoginPanel, { UserLoggedInAndLogOut } from './components/UserComponents'
 import { initializeUsers } from './reducers/usersReducer'
 import { checkForAlreadyLoggedInUser } from './reducers/loginReducer'
+import FileUploadPage from './components/FileUpload/FileUpload'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -29,10 +30,11 @@ const App = () => {
 
       <Notification />
 
-      {/* <Switch>
+      <Switch>
         <Route path="/">
+          <FileUploadPage />
         </Route>
-      </Switch> */}
+      </Switch>
     </div>
   )
 }

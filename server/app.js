@@ -4,12 +4,15 @@ const cors = require('cors')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
-const middleware = require('./utils/middleware')
+const middleware = require('./utils/middleware/middleware')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
+const fileRouter = require('./controllers/file')
 const logger = require('./utils/logger')
 
 const app = express()
+
+global.__basedir = __dirname
 
 mongoose
   .connect(config.MONGODB_URI, {
@@ -38,6 +41,7 @@ app.use(middleware.tokenExtractor)
 
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+app.use('/api/file', fileRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

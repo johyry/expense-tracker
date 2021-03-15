@@ -1,0 +1,14 @@
+POST http://localhost:3002/api/users
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "salainen"
+}
+
+####
+
+GET http://localhost:3002/api/users
+
+
+###

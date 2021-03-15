@@ -48,7 +48,7 @@ const { removeExtraWhiteSpace } = require('./helpermethods.js')
 // ''
 
 const parseTransaction = (array) => {
-  // checking out the type of payment and forwarding to according type method
+  // checking out the type of payment and forwarding to according typehandler method
   let typeLine = removeExtraWhiteSpace(array[1])
   typeLine = typeLine.split(' ')
   const type = typeLine[1]

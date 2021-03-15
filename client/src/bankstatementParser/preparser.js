@@ -9,6 +9,8 @@ const { removeEmptyLines } = require('./helpermethods.js')
 const preParse = (initialText) => {
   let start = 0
 
+  // console.log(initialText)
+
   // first page
   let parsedText = initialText.substring(
     initialText.indexOf('KIRJAUSPÄIVÄ') + 13,
