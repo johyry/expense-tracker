@@ -9,12 +9,10 @@ const { removeEmptyLines } = require('./helpermethods.js')
 const preParse = (initialText) => {
   let start = 0
 
-  // console.log(initialText)
-
   // first page
   let parsedText = initialText.substring(
     initialText.indexOf('KIRJAUSPÄIVÄ') + 13,
-    (start = initialText.indexOf('SIIRTO'))
+    (start = initialText.indexOf('SIIRTO')),
   )
   parsedText = parsedText.trim()
   start += 7
@@ -23,14 +21,16 @@ const preParse = (initialText) => {
   while (initialText.indexOf('SIIRTO', start) !== -1) {
     const part1 = initialText.substring(
       initialText.indexOf('2181702-8', start) + 10,
-      (start = initialText.indexOf('SIIRTO', start))
+      (start = initialText.indexOf('SIIRTO', start)),
     )
     start += 7
     parsedText = parsedText.concat(part1)
   }
 
   // page n
-  const part1 = initialText.substring(initialText.indexOf('2181702-8', start) + 10)
+  const part1 = initialText.substring(
+    initialText.indexOf('2181702-8', start) + 10,
+  )
   parsedText = parsedText.concat(part1)
 
   parsedText = removeEmptyLines(parsedText)

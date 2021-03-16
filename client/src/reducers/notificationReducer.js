@@ -23,10 +23,10 @@ export const removeNotification = (type, dispatch) => {
   })
 }
 
-export const handleErrorMessages = (message, dispatch) => {
-  displayNotification(message, 'error', dispatch)
+export const handleNotifications = (message, dispatch, type) => {
+  displayNotification(message, type, dispatch)
   setTimeout(() => {
-    removeNotification('error', dispatch)
+    removeNotification(type, dispatch)
   }, 5000)
 }
 

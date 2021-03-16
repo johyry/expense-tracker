@@ -1,5 +1,5 @@
 import userService from '../services/users'
-import { handleErrorMessages } from './notificationReducer'
+import { handleNotifications } from './notificationReducer'
 
 const userReducer = (state = [], action) => {
   switch (action.type) {
@@ -13,7 +13,6 @@ const userReducer = (state = [], action) => {
 export const initializeUsers = () => async (dispatch) => {
   try {
     const users = await userService.getAll()
-    console.log('??', users)
     dispatch({
       type: 'INITIALIZE_USERS',
       data: {
@@ -21,7 +20,7 @@ export const initializeUsers = () => async (dispatch) => {
       },
     })
   } catch (exception) {
-    handleErrorMessages('Fetching all users failed', dispatch)
+    handleNotifications('Fetching all users failed', dispatch, 'error')
   }
 }
 
