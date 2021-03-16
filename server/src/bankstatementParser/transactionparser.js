@@ -47,40 +47,48 @@ const { removeExtraWhiteSpace } = require('./helpermethods.js')
 // 'KIRJAUSPÄIVÄ 10.02.2021',
 // ''
 
-const parseTransaction = (array) => {
+const parseTransaction = (array, monthAndYear) => {
   // checking out the type of payment and forwarding to according typehandler method
   let typeLine = removeExtraWhiteSpace(array[1])
   typeLine = typeLine.split(' ')
   const type = typeLine[1]
 
+  if (!type) return
+
   let payment = {
+    id: parseId(array[0]),
     sum: parseSum(array[0]),
-    date: parseDate(array[0]),
-    monthlyTransactionId: parseId(array[0]),
+    date: new Date(
+      monthAndYear.year,
+      monthAndYear.month - 1,
+      parseDay(array[0]),
+    ),
+    monthlyTransactionId: parseMonthlyId(array[0]),
+    type: parseType(array[1]),
   }
 
-  if (type === '209') {
-    return (payment = handleCardPayment(array, payment))
+  if (type.includes('209')) {
+    return handleCardPayment(array, payment)
   }
 
-  if (type === '236') {
-    return (payment = handleBankServiceCharge(array, payment))
+  if (type.includes('236')) {
+    return handleBankServiceCharge(array, payment)
   }
 
-  if (type === '113' || type === '213') {
-    return (payment = handleBankTransfer(array, payment))
+  if (type.includes('113') || type.includes('213')) {
+    return handleBankTransfer(array, payment)
   }
 
-  if (type === '256') {
-    return (payment = handleWebPayment(array, payment))
+  if (type.includes('256')) {
+    return handleWebPayment(array, payment)
   }
 
-  if (type === '205') {
-    return (payment = handleAtmWithdrawal(array, payment))
+  if (type.includes('205')) {
+    return handleAtmWithdrawal(array, payment)
   }
 
-  if (type === '127') {
-    return (payment = handleLoanWithdrawal(array, payment))
+  if (type.includes('127')) {
+    return handleLoanWithdrawal(array, payment)
   }
 }
 
@@ -92,13 +100,11 @@ const parseTransaction = (array) => {
 //   '                             XXXXX',
 //   ''
 const handleCardPayment = (array, payment) => {
-  const type = 'Korttiosto'
   const shop = parseShop(array[2])
   const location = parseLocation(array[3])
 
   payment = {
     ...payment,
-    type,
     shop,
     location,
   }
@@ -113,13 +119,11 @@ const handleCardPayment = (array, payment) => {
 //   '                             ETUASIAKKUUSPAKETTI 5,00',
 //   ''
 const handleBankServiceCharge = (array, payment) => {
-  const type = 'Palvelumaksu'
-  const shop = parseShop(array[3])
+  const description = parseShop(array[3])
 
   payment = {
     ...payment,
-    type,
-    shop,
+    description,
   }
 
   return payment
@@ -134,13 +138,22 @@ const handleBankServiceCharge = (array, payment) => {
 // '                             XXXXX',
 // ''
 const handleBankTransfer = (array, payment) => {
-  const type = 'Tilisiirto'
-  const receiverOrSender = parseBankTransferReceiver(array[0])
+  if (payment.type.includes('113')) {
+    const sender = parseBankTransferReceiverOrSender(array[0])
 
-  payment = {
-    ...payment,
-    type,
-    receiverOrSender,
+    payment = {
+      ...payment,
+      sender,
+    }
+  }
+
+  if (payment.type.includes('213')) {
+    const receiver = parseBankTransferReceiverOrSender(array[0])
+
+    payment = {
+      ...payment,
+      receiver,
+    }
   }
 
   return payment
@@ -154,12 +167,10 @@ const handleBankTransfer = (array, payment) => {
 // 'KIRJAUSPÄIVÄ 10.02.2021',
 // ''
 const handleWebPayment = (array, payment) => {
-  const type = 'Verkkomaksu'
   const receiver = parseWebPaymentReceiver(array[0])
 
   payment = {
     ...payment,
-    type,
     receiver,
   }
 
@@ -174,12 +185,10 @@ const handleWebPayment = (array, payment) => {
 // '                             XXXXX',
 // ''
 const handleAtmWithdrawal = (array, payment) => {
-  const type = 'Automaattinosto'
   const location = parseLocation(array[3])
 
   payment = {
     ...payment,
-    type,
     location,
   }
 
@@ -192,16 +201,22 @@ const handleAtmWithdrawal = (array, payment) => {
 //   '                             Luoton nosto 12345',
 //   '                             XXXXX',
 const handleLoanWithdrawal = (array, payment) => {
-  const type = 'Lainan nosto'
   const lender = parseLoanLender(array[0])
 
   payment = {
     ...payment,
-    type,
     lender,
   }
 
   return payment
+}
+
+//   '                             127 Lainan nosto',
+const parseType = (stringToParse) => {
+  let parts = removeExtraWhiteSpace(stringToParse)
+  parts = parts.split(' ')
+  parts.shift()
+  return parts.join(' ')
 }
 
 // Example
@@ -215,11 +230,11 @@ const parseSum = (stringToParse) => {
 
 // Example
 // '21057J49MQ        K  0226                                        53                                35.23 -',
-const parseDate = (stringToParse) => {
+const parseDay = (stringToParse) => {
   let parts = removeExtraWhiteSpace(stringToParse)
   parts = parts.split(' ')
-  const date = parts[2]
-  return date
+  const day = parts[2].substring(2, 4)
+  return day
 }
 
 // Example
@@ -249,7 +264,7 @@ const parseLocation = (stringToParse) => {
 // If there is a name with more than four empty spaces this method fails to completely parse the name
 // Also I only had around 5 example cases of bank transfers and they all had >=4 empty spaces in end
 // of the name, but this might not be the case in all occasions
-const parseBankTransferReceiver = (stringToParse) => {
+const parseBankTransferReceiverOrSender = (stringToParse) => {
   let startOfReceiver = 0
   let endOfReceiver = 0
   let emptySpaces = 0
@@ -257,7 +272,8 @@ const parseBankTransferReceiver = (stringToParse) => {
   for (let i = 0; i < stringToParse.length; i += 1) {
     if (stringToParse.charAt(i) === ' ') emptySpaces += 1
     if (stringToParse.charAt(i) !== ' ') emptySpaces = 0
-    if (emptySpaces === 2 && stringToParse.charAt(i + 1) !== ' ') twoEmptySpacesInRow += 1
+    if (emptySpaces === 2 && stringToParse.charAt(i + 1) !== ' ')
+      twoEmptySpacesInRow += 1
     if (twoEmptySpacesInRow === 2) {
       startOfReceiver = i + 1
       break
@@ -277,16 +293,24 @@ const parseBankTransferReceiver = (stringToParse) => {
   return stringToParse.slice(startOfReceiver, endOfReceiver)
 }
 
-// Forwards it to parseBankTransferReceiver because their format is same
-const parseWebPaymentReceiver = (stringToParse) => parseBankTransferReceiver(stringToParse)
+// Forwards it to parseBankTransferReceiverOrSender because their format is same
+const parseWebPaymentReceiver = (stringToParse) =>
+  parseBankTransferReceiverOrSender(stringToParse)
 
-const parseLoanLender = (stringToParse) => parseBankTransferReceiver(stringToParse)
+const parseLoanLender = (stringToParse) =>
+  parseBankTransferReceiverOrSender(stringToParse)
 
 // '21040KWFHP        A  0209  Elisa Oyj                             20                                23.86 -',
-const parseId = (stringToParse) => {
+const parseMonthlyId = (stringToParse) => {
   stringToParse = removeExtraWhiteSpace(stringToParse)
   const parts = stringToParse.split(' ')
   return parts[parts.length - 3]
+}
+
+const parseId = (stringToParse) => {
+  stringToParse = removeExtraWhiteSpace(stringToParse)
+  const parts = stringToParse.split(' ')
+  return parts[0]
 }
 
 module.exports = parseTransaction

@@ -1,5 +1,5 @@
 import loginService from '../services/login'
-import { handleErrorMessages } from './notificationReducer'
+import { handleNotifications } from './notificationReducer'
 
 const loginReducer = (state = '', action) => {
   switch (action.type) {
@@ -23,7 +23,7 @@ export const handleLogIn = (credentials) => async (dispatch) => {
       data: loggedInUser,
     })
   } catch (exception) {
-    handleErrorMessages('Login failed', dispatch)
+    handleNotifications('Login failed', dispatch)
   }
 }
 
