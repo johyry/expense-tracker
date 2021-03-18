@@ -1,32 +1,11 @@
 const fs = require('fs')
-const util = require('util')
 const fileRouter = require('express').Router()
-const multer = require('multer')
 const jwt = require('jsonwebtoken')
 
 const transactionParser = require('../bankstatementParser/parser')
 const transactionSaver = require('../utils/transactionsaver')
 const User = require('../models/user')
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, `${__basedir}/resources/static/assets/uploads/`)
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname)
-  },
-})
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'application/pdf') {
-    cb(null, true)
-  } else {
-    cb(null, false)
-  }
-}
-
-const upload = multer({ storage, fileFilter }).single('file')
-const uploader = util.promisify(upload)
+const fileSaver = require('../utils/middleware/fileSaver')
 
 fileRouter.post('/upload', async (req, res) => {
   try {
@@ -38,7 +17,7 @@ fileRouter.post('/upload', async (req, res) => {
     const user = await User.findById(decodedToken.id)
 
     // uploads the file to temporar folder to be processed
-    await uploader(req, res)
+    await fileSaver.uploader(req, res)
 
     if (req.file === undefined) {
       return res.status(400).send({ message: 'Please upload a file!' })
@@ -49,7 +28,7 @@ fileRouter.post('/upload', async (req, res) => {
     // Parse pdf and get transactions
     const transactions = await transactionParser.parser(pathToFile)
 
-    // Remove pdf
+    // Deletes pdf after parse
     fs.unlinkSync(pathToFile)
 
     // Save transactions to mongodb with user reference
