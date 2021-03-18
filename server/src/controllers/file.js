@@ -2,20 +2,22 @@ const fs = require('fs')
 const util = require('util')
 const fileRouter = require('express').Router()
 const multer = require('multer')
+const jwt = require('jsonwebtoken')
+
 const transactionParser = require('../bankstatementParser/parser')
+const transactionSaver = require('../utils/transactionsaver')
+const User = require('../models/user')
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, `${__basedir}/resources/static/assets/uploads/`)
   },
   filename: (req, file, cb) => {
-    console.log(file.originalname)
     cb(null, file.originalname)
   },
 })
 
 const fileFilter = (req, file, cb) => {
-  console.log(file)
   if (file.mimetype === 'application/pdf') {
     cb(null, true)
   } else {
@@ -28,6 +30,14 @@ const uploader = util.promisify(upload)
 
 fileRouter.post('/upload', async (req, res) => {
   try {
+    const token = req.token
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+      return res.status(401).json({ error: 'token missing or invalid' })
+    }
+    const user = await User.findById(decodedToken.id)
+
+    // uploads the file to temporar folder to be processed
     await uploader(req, res)
 
     if (req.file === undefined) {
@@ -42,9 +52,16 @@ fileRouter.post('/upload', async (req, res) => {
     // Remove pdf
     fs.unlinkSync(pathToFile)
 
+    // Save transactions to mongodb with user reference
+    const savedTransactions = await transactionSaver(transactions, user)
+    const savedTransactionsIds = savedTransactions.map((t) => t._id)
+
+    // Add references to user and save users information to db
+    user.transactions = user.transactions.concat(savedTransactionsIds)
+    await user.save()
+
     res.status(200).send({
-      data: transactions,
-      message: `Uploaded the file successfully: ${req.file.originalname}`,
+      message: `Uploaded the file and transactions successfully: ${req.file.originalname}`,
     })
   } catch (err) {
     res.status(500).send({

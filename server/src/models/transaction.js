@@ -20,6 +20,13 @@ const transactionSchema = new mongoose.Schema(
     type: {
       type: String,
     },
+    category: {
+      type: String,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   options,
 )

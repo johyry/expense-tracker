@@ -4,11 +4,29 @@
 
 Every transaction has following fields:
 
-id,
-sum,
-date,
-monthlyTransactionId,
-type
+    id: {
+      type: String,
+      unique: true,
+    },
+    sum: {
+      type: Number,
+    },
+    date: {
+      type: Date,
+    },
+    monthlyTransactionId: {
+      type: String,
+    },
+    type: {
+      type: String,
+    },
+    category: {
+      type: String,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
 
 And in addition each type has few unique fields
 
@@ -19,8 +37,12 @@ And in addition each type has few unique fields
 
 Unique fields:
 
-- receiver OR
-- sender
+    sender: {
+      type: String,
+    }, OR
+    receiver: {
+      type: String,
+    },
 
         {
             "id": "20092DRVHR",
@@ -44,8 +66,9 @@ Unique fields:
 
 Unique fields:
 
-- lender
-
+    lender: {
+      type: String,
+    },
         {
             id: '20090ZY16F',
             sum: 4321,
@@ -55,12 +78,32 @@ Unique fields:
             lender: 'Aktia Pankki Oyj - Aktia Bank Abp'
         }
 
+### 205, Atm withdrawal
+
+Unique fields:
+
+    location: {
+      type: String,
+    },
+        {
+            "id": "20106X8819",
+            "sum": -1234,
+            "date": "2020-04-14T21:00:00.000Z",
+            "monthlyTransactionId": "25",
+            "type": "205 Automaattinosto",
+            "location": "MOMMILANTIE 1 FI"
+        }
+
 ### 209, Card payment
 
 Unique fields:
 
-- shop
-- location
+    shop: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
 
         {
             "id": "20094KL9RS",
@@ -72,27 +115,13 @@ Unique fields:
             "location": "Weesp NL"
         },
 
-### 205, Atm withdrawal
-
-Unique fields:
-
-- location
-
-        {
-            "id": "20106X8819",
-            "sum": -1234,
-            "date": "2020-04-14T21:00:00.000Z",
-            "monthlyTransactionId": "25",
-            "type": "205 Automaattinosto",
-            "location": "MOMMILANTIE 1 FI"
-        }
-
 ### 236, Bank service charge
 
 Unique fields:
 
-- description
-
+    description: {
+      type: String,
+    },
         {
             "id": "20328QV2CQ",
             "sum": -123,
@@ -106,8 +135,9 @@ Unique fields:
 
 Unique fields:
 
-- receiver
-
+    receiver: {
+      type: String,
+    },
         {
             "id": "20094KFWNV",
             "sum": -3333,
