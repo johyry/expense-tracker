@@ -35,14 +35,6 @@ const parser = async (pathToFile) => {
   return payments
 }
 
-const test = (file) => {
-  const dataBuffer = fs.readFile(file)
-  pdf(dataBuffer).then((data) => {
-    console.log(data.text)
-  })
-}
-
 module.exports = {
   parser,
-  test,
 }
