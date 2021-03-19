@@ -56,7 +56,7 @@ const parseTransaction = (array, monthAndYear) => {
   if (!type) return
 
   let payment = {
-    id: parseId(array[0]),
+    bankId: parseId(array[0]),
     sum: parseSum(array[0]),
     date: new Date(
       monthAndYear.year,
@@ -65,6 +65,7 @@ const parseTransaction = (array, monthAndYear) => {
     ),
     monthlyTransactionId: parseMonthlyId(array[0]),
     type: parseType(array[1]),
+    category: '',
   }
 
   if (type.includes('209')) {
