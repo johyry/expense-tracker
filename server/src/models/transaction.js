@@ -4,7 +4,7 @@ const uniqueValidator = require('mongoose-unique-validator')
 const options = { discriminatorKey: 'kind' }
 const transactionSchema = new mongoose.Schema(
   {
-    id: {
+    bankId: {
       type: String,
       unique: true,
     },
@@ -32,6 +32,14 @@ const transactionSchema = new mongoose.Schema(
 )
 
 transactionSchema.plugin(uniqueValidator)
+
+transactionSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.mongoId = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  },
+})
 
 const Transaction = mongoose.model('Transaction', transactionSchema)
 
@@ -137,6 +145,7 @@ const WebPaymentTransaction = Transaction.discriminator(
 )
 
 module.exports = {
+  Transaction,
   ReceivedBankTransferTransaction,
   SentBankTransferTransaction,
   LoanWithdrawalTransaction,
