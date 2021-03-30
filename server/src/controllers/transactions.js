@@ -11,13 +11,12 @@ transactionRouter.get('/', async (request, response) => {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
   const user = await User.findById(decodedToken.id)
-  console.log('trying to find by user:', user)
 
   const transactions = await Transaction.find({ user }).populate('user', {
     username: 1,
   })
-  console.log('found:', transactions)
-  console.log('transactions.length', transactions.length)
+
+  console.log(transactions)
   response.json(transactions)
 })
 
