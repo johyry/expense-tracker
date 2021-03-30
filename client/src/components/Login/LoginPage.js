@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { handleLogIn, handleLogOut } from '../reducers/loginReducer'
-import Togglable from './Togglable'
+import { useHistory } from 'react-router-dom'
+import { handleLogIn } from '../../reducers/loginReducer'
+import Togglable from '../Misc/Togglable'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -9,11 +10,14 @@ const LoginForm = () => {
 
   const dispatch = useDispatch()
 
+  const history = useHistory()
+
   const handleLogin = async (event) => {
     event.preventDefault()
     dispatch(handleLogIn({ username, password }))
     setUsername('')
     setPassword('')
+    history.push('/')
   }
 
   return (
@@ -43,28 +47,11 @@ const LoginForm = () => {
 
 const LoginPanel = () => (
   <div>
-    <h2>Log In</h2>
+    <h3>Log In</h3>
     <Togglable buttonLabel="Log in">
       <LoginForm />
     </Togglable>
   </div>
 )
-
-export const UserLoggedInAndLogOut = ({ user }) => {
-  const dispatch = useDispatch()
-
-  const logOut = () => {
-    dispatch(handleLogOut())
-  }
-
-  return (
-    <>
-      <>{user.username} logged in</>
-      <button type="button" onClick={logOut}>
-        log out
-      </button>
-    </>
-  )
-}
 
 export default LoginPanel

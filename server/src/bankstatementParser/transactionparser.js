@@ -65,7 +65,7 @@ const parseTransaction = (array, monthAndYear) => {
     ),
     monthlyTransactionId: parseMonthlyId(array[0]),
     type: parseType(array[1]),
-    category: '',
+    category: 'Other',
   }
 
   if (type.includes('209')) {

@@ -4,7 +4,7 @@
 
 Every transaction has following fields:
 
-    id: {
+    bankId: {
       type: String,
       unique: true,
     },
@@ -27,6 +27,9 @@ Every transaction has following fields:
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    mongoId: {
+      type: mongoose.Schema.Types.ObjectId,
+    }
 
 And in addition each type has few unique fields
 
@@ -45,21 +48,35 @@ Unique fields:
     },
 
         {
-            "id": "20092DRVHR",
-            "sum": 1234,
-            "date": "2020-03-31T21:00:00.000Z",
-            "monthlyTransactionId": "1",
-            "type": "113 Tilisiirto",
-            "sender": "KELA/FPA"
+          "kind": "ReceivedBankTransfer",
+          "bankId": "20072MVPVW",
+          "sum": 300,
+          "date": "2020-03-11T22:00:00.000Z",
+          "monthlyTransactionId": "33",
+          "type": "113 Tilisiirto",
+          "category": "",
+          "sender": "Some Name",
+          "user": {
+              "username": "testaaja",
+              "id": "60542a787c199d460d9214d9"
+          },
+          "mongoId": "60542ed29a46e54a10b71ba0"
         },
 
         {
-            "id": "20092DRVHR",
-            "sum": -1234,
-            "date": "2020-03-31T21:00:00.000Z",
-            "monthlyTransactionId": "1",
-            "type": "213 Tilisiirto",
-            "receiver": "KELA/FPA"
+          "kind": "SentBankTransfer",
+          "bankId": "2006441WF7",
+          "sum": -3212,
+          "date": "2020-03-03T22:00:00.000Z",
+          "monthlyTransactionId": "16",
+          "type": "213 Tilisiirto",
+          "category": "",
+          "receiver": "Ylioppilaiden terveydenhoitosäätiö",
+          "user": {
+              "username": "testaaja",
+              "id": "60542a787c199d460d9214d9"
+          },
+          "mongoId": "60542ed29a46e54a10b71b8f"
         },
 
 ### 127, Loan withdrawal
@@ -70,13 +87,20 @@ Unique fields:
       type: String,
     },
         {
-            id: '20090ZY16F',
-            sum: 4321,
-            date: 2020-03-29T21:00:00.000Z,
-            monthlyTransactionId: '61',
-            type: '127 Lainan nosto',
-            lender: 'Aktia Pankki Oyj - Aktia Bank Abp'
-        }
+          "kind": "LoanWithdrawal",
+          "bankId": "20090ZY16F",
+          "sum": 420,
+          "date": "2020-03-29T21:00:00.000Z",
+          "monthlyTransactionId": "61",
+          "type": "127 Lainan nosto",
+          "category": "",
+          "lender": "Aktia Pankki Oyj - Aktia Bank Abp",
+          "user": {
+              "username": "testaaja",
+              "id": "60542a787c199d460d9214d9"
+          },
+          "mongoId": "60542ed29a46e54a10b71bbc"
+        },
 
 ### 205, Atm withdrawal
 
@@ -106,13 +130,20 @@ Unique fields:
     },
 
         {
-            "id": "20094KL9RS",
-            "sum": -4321,
-            "date": "2020-04-02T21:00:00.000Z",
-            "monthlyTransactionId": "2",
-            "type": "209 Korttiosto",
-            "shop": "Spotify",
-            "location": "Weesp NL"
+          "kind": "CardPayment",
+          "bankId": "200623TFHK",
+          "sum": -2222.6,
+          "date": "2020-03-01T22:00:00.000Z",
+          "monthlyTransactionId": "4",
+          "type": "209 Korttiosto",
+          "category": "",
+          "shop": "S MARKET",
+          "location": "ESPOO FI",
+          "user": {
+              "username": "testaaja",
+              "id": "60542a787c199d460d9214d9"
+          },
+          "mongoId": "60542ed29a46e54a10b71b83"
         },
 
 ### 236, Bank service charge
@@ -138,11 +169,19 @@ Unique fields:
     receiver: {
       type: String,
     },
+
         {
-            "id": "20094KFWNV",
-            "sum": -3333,
-            "date": "2020-04-02T21:00:00.000Z",
-            "monthlyTransactionId": "9",
-            "type": "256 Verkkomaksu",
-            "receiver": "ELISA OYJ"
+        "kind": "WebPayment",
+        "bankId": "20064SFXQY",
+        "sum": -2221.01,
+        "date": "2020-03-03T22:00:00.000Z",
+        "monthlyTransactionId": "18",
+        "type": "256 Verkkomaksu",
+        "category": "",
+        "receiver": "ELISA OYJ",
+        "user": {
+            "username": "testaaja",
+            "id": "60542a787c199d460d9214d9"
+        },
+        "mongoId": "60542ed29a46e54a10b71b91"
         },

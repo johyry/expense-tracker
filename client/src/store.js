@@ -4,12 +4,12 @@ import thunk from 'redux-thunk'
 
 import notificationReducer from './reducers/notificationReducer'
 import loginReducer from './reducers/loginReducer'
-import usersReducer from './reducers/usersReducer'
+import transactionReducer from './reducers/transactionReducer'
 
 const reducer = combineReducers({
   notification: notificationReducer,
   login: loginReducer,
-  users: usersReducer,
+  transactions: transactionReducer,
 })
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))

@@ -1,4 +1,5 @@
 import loginService from '../services/login'
+import transactionService from '../services/transaction'
 import { handleNotifications } from './notificationReducer'
 
 const loginReducer = (state = '', action) => {
@@ -18,6 +19,7 @@ export const handleLogIn = (credentials) => async (dispatch) => {
   try {
     const loggedInUser = await loginService.login(credentials)
     window.localStorage.setItem('loggedAppUser', JSON.stringify(loggedInUser))
+    transactionService.setToken(loggedInUser.token)
     dispatch({
       type: 'LOGIN',
       data: loggedInUser,
@@ -31,6 +33,7 @@ export const checkForAlreadyLoggedInUser = () => {
   const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
   if (loggedUserJSON) {
     const userLog = JSON.parse(loggedUserJSON)
+    transactionService.setToken(userLog.token)
     return {
       type: 'SETUSER',
       data: userLog,
