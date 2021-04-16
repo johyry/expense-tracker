@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { changeCategory } from '../../reducers/transactionReducer'
 
 const Div = styled.div`
   border: 1px solid #ccc !important;
@@ -24,6 +26,21 @@ const Div = styled.div`
 `
 
 const Transaction = ({ transaction }) => {
+  const [newCategory, setNewCategory] = useState('')
+
+  const dispatch = useDispatch()
+
+  const initiateChangeCategory = (event) => {
+    event.preventDefault()
+    dispatch(
+      changeCategory({
+        id: transaction.mongoId,
+        category: newCategory,
+      })
+    )
+    setNewCategory('')
+  }
+
   let typeToReturn = {}
 
   if (transaction.kind === 'ReceivedBankTransfer') {
@@ -61,10 +78,16 @@ const Transaction = ({ transaction }) => {
       {typeToReturn}
       <p>Sum: {transaction.sum}</p>
       <p>Type: {transaction.kind}</p>
+      <p>Monthly ID: {transaction.monthlyTransactionId}</p>
       <p>
         Date: {date.getDate() + 1}.{date.getMonth() + 1}.{date.getFullYear()}
       </p>
       <p>Category: {transaction.category}</p>
+      <form onSubmit={initiateChangeCategory}>
+        Change Category:
+        <input value={newCategory} onChange={({ target }) => setNewCategory(target.value)} />
+        <button type="submit">Save</button>
+      </form>
     </Div>
   )
 }

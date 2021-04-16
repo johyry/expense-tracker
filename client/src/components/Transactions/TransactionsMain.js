@@ -1,21 +1,20 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+import { useSelector } from 'react-redux'
 
-import { initializeTransactions } from '../../reducers/transactionReducer'
+// import { initializeTransactions } from '../../reducers/transactionReducer'
 import CategoryPage from './CategoryOverview'
 
 const TransactionsMain = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(initializeTransactions())
-  }, [])
+  // const dispatch = useDispatch()
+  // useEffect(() => {
+  //   dispatch(initializeTransactions())
+  // }, [])
 
-  const transactions = useSelector((state) => state.transactions.transactions)
-  console.log('transactions:', transactions)
+  const transactions = useSelector((state) => state.transactions)
   if (!transactions) return null
 
   const yearMonth = divideTransactionsByYearAndMonth(transactions)
-  console.log('map:', yearMonth)
+  console.log('yearMonth', yearMonth)
   return (
     <div>
       <p>Here there is gonna be the transactions page</p>

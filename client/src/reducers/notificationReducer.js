@@ -9,24 +9,22 @@ const notificationReducer = (state = '', action) => {
   }
 }
 
-export const displayNotification = (message, type, dispatch) => {
+let timeoutId
+
+export const handleNotifications = (message) => async (dispatch) => {
   dispatch({
     type: 'DISPLAYNOTIFICATION',
-    data: { message, type },
+    message,
   })
-}
 
-export const removeNotification = (type, dispatch) => {
-  dispatch({
-    type: 'REMOVENOTIFICATION',
-    data: { message: '', type },
-  })
-}
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+  }
 
-export const handleNotifications = (message, dispatch, type) => {
-  displayNotification(message, type, dispatch)
-  setTimeout(() => {
-    removeNotification(type, dispatch)
+  timeoutId = setTimeout(() => {
+    dispatch({
+      type: 'REMOVENOTIFICATION',
+    })
   }, 5000)
 }
 

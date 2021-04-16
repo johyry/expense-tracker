@@ -20,30 +20,32 @@ const CategoryOverview = ({ transactions }) => {
     }
   })
 
-  const categories = []
-  const listOfTransactionsPerCategory = []
-  categoriesAndTransactions.forEach((value, key) => {
-    categories.push(key)
-    listOfTransactionsPerCategory.push(
-      <th>
-        {value.map((transaction) => (
-          <Transaction transaction={transaction} />
-        ))}
-      </th>
-    )
-  })
+  // const categories = []
+  // const listOfTransactionsPerCategory = []
+  // categoriesAndTransactions.forEach((value, key) => {
+  //   categories.push(key)
+  //   listOfTransactionsPerCategory.push(
+  //     <th>
+  //       {value.map((transaction) => (
+  //         <Transaction transaction={transaction} />
+  //       ))}
+  //     </th>
+  //   )
+  // })
 
   const categoryPagesToDisplay = []
   categoriesAndTransactions.forEach((value, key) => {
     categoryPagesToDisplay.push(<CategoryPage title={key} transactions={value} />)
   })
 
+  const style = {
+    display: 'flex',
+  }
+
   return (
     <div>
       <h2>Transaction categories:</h2>
-      <table>
-        <tbody>{categoryPagesToDisplay}</tbody>
-      </table>
+      <div style={style}>{categoryPagesToDisplay}</div>
     </div>
   )
 }
@@ -71,40 +73,45 @@ const CategoryPage = ({ title, transactions }) => {
   const averageOut = outgoingSum / outgoingAmount
 
   return (
-    <div>
-      <tr>
-        <th>{title}</th>
-      </tr>
-      <tr>
-        <td>
-          <p>Incoming:</p>
-          <p>Amount of incoming transactions: {incomingAmount}</p>
-          <p>Average incoming sum: {averageIn}</p>
-          <p>Total incoming: {incomingSum}</p>
-          <br />
-          <p>Outgoing:</p>
-          <p>Amount of outgoing transactions: {outgoingAmount}</p>
-          <p>Average outgoing sum: {averageOut}</p>
-          <p>Total outgoing: {outgoingSum}</p>
-          <p>Total sum: {incomingSum + outgoingSum}</p>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <Togglable buttonLabel="Show list of transactions">
-            <p>List of transactions: </p>
-            <Filter
-              text="Filter:"
-              filter={filter}
-              onChange={({ target }) => setFilter(target.value)}
-            />
-            {filteredTransactions.map((transaction) => (
-              <Transaction transaction={transaction} />
-            ))}
-          </Togglable>
-        </td>
-      </tr>
-    </div>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>{title}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Incoming:</p>
+            <p>Amount of incoming transactions: {incomingAmount}</p>
+            <p>Average incoming sum: {averageIn}</p>
+            <p>Total incoming: {incomingSum}</p>
+            <br />
+            <p>Outgoing:</p>
+            <p>Amount of outgoing transactions: {outgoingAmount}</p>
+            <p>Average outgoing sum: {averageOut}</p>
+            <p>Total outgoing: {outgoingSum}</p>
+            <br />
+            <p>Total sum: {incomingSum + outgoingSum}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <Togglable buttonLabel="Show list of transactions">
+              <p>List of transactions: </p>
+              <Filter
+                text="Filter:"
+                filter={filter}
+                onChange={({ target }) => setFilter(target.value)}
+              />
+              {filteredTransactions.map((transaction) => (
+                <Transaction transaction={transaction} />
+              ))}
+            </Togglable>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   )
 }
 

@@ -16,12 +16,10 @@ fileRouter.post('/upload', async (req, res) => {
     }
     const user = await User.findById(decodedToken.id)
 
-    console.log(req.file)
-
     // uploads the file to temporar folder to be processed
     await fileSaver.uploader(req, res)
 
-    // console.log(req.file)
+    console.log('req:', req)
 
     if (req.file === undefined) {
       return res.status(400).send({ message: 'Please upload a file!' })
