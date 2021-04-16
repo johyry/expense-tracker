@@ -9,7 +9,6 @@ const setToken = (newToken) => {
 }
 
 const getAll = async () => {
-  console.log('do we have a token?', token)
   const config = {
     headers: { Authorization: token },
   }
@@ -18,4 +17,18 @@ const getAll = async () => {
   return response.data
 }
 
-export default { getAll, setToken }
+const changeCategory = async (details) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  console.log('details at service:', details.category)
+  const response = await axios.put(
+    baseUrl.concat('/', details.id),
+    { category: details.category },
+    config
+  )
+  console.log('response from service:', response.data)
+  return response.data
+}
+
+export default { getAll, setToken, changeCategory }

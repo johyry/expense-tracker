@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import Notification from './components/Misc/Notification'
 import LoginPanel from './components/Login/LoginPage'
 import { checkForAlreadyLoggedInUser } from './reducers/loginReducer'
+import { initializeTransactions } from './reducers/transactionReducer'
 import FileUploadPage from './components/FileUpload/FileUpload'
 import TransactionsMain from './components/Transactions/TransactionsMain'
 import Home from './components/Home'
@@ -14,6 +15,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(checkForAlreadyLoggedInUser())
+    dispatch(initializeTransactions())
   }, [dispatch])
 
   return (

@@ -1,5 +1,6 @@
 import loginService from '../services/login'
 import transactionService from '../services/transaction'
+import fileUploadService from '../services/fileUpload'
 import { handleNotifications } from './notificationReducer'
 
 const loginReducer = (state = '', action) => {
@@ -20,6 +21,7 @@ export const handleLogIn = (credentials) => async (dispatch) => {
     const loggedInUser = await loginService.login(credentials)
     window.localStorage.setItem('loggedAppUser', JSON.stringify(loggedInUser))
     transactionService.setToken(loggedInUser.token)
+    fileUploadService.setToken(loggedInUser.token)
     dispatch({
       type: 'LOGIN',
       data: loggedInUser,
@@ -34,6 +36,7 @@ export const checkForAlreadyLoggedInUser = () => {
   if (loggedUserJSON) {
     const userLog = JSON.parse(loggedUserJSON)
     transactionService.setToken(userLog.token)
+    fileUploadService.setToken(userLog.token)
     return {
       type: 'SETUSER',
       data: userLog,
@@ -42,8 +45,11 @@ export const checkForAlreadyLoggedInUser = () => {
   return { type: 'DO_NOTHING' }
 }
 
-export const handleLogOut = () => ({
-  type: 'LOGOUT',
-})
+export const handleLogOut = () => {
+  window.localStorage.removeItem('loggedAppUser')
+  return {
+    type: 'LOGOUT',
+  }
+}
 
 export default loginReducer
