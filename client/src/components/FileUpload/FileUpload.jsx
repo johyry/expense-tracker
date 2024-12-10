@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { handleNotifications } from '../../reducers/notificationReducer'
 import fileUpload from '../../services/fileUpload'
 
@@ -9,7 +9,7 @@ const FileUploadPage = () => {
   const [isSelected, setIsSelected] = useState(false)
 
   const dispatch = useDispatch()
-  const history = useHistory()
+  const navigate = useNavigate();
 
   const changeHandler = (event) => {
     const file = event.target.files[0]
@@ -31,7 +31,7 @@ const FileUploadPage = () => {
     try {
       const res = await fileUpload.upload(selectedFile)
       handleNotifications(res, dispatch, 'notification')
-      history.push('/transactions')
+      navigate('/transactions')
     } catch (error) {
       console.log(error)
     }

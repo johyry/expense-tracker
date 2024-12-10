@@ -55,7 +55,7 @@ const parseTransaction = (array, monthAndYear) => {
 
   if (!type) return
 
-  let payment = {
+  const payment = {
     bankId: parseId(array[0]),
     sum: parseSum(array[0]),
     date: new Date(
@@ -273,8 +273,7 @@ const parseBankTransferReceiverOrSender = (stringToParse) => {
   for (let i = 0; i < stringToParse.length; i += 1) {
     if (stringToParse.charAt(i) === ' ') emptySpaces += 1
     if (stringToParse.charAt(i) !== ' ') emptySpaces = 0
-    if (emptySpaces === 2 && stringToParse.charAt(i + 1) !== ' ')
-      twoEmptySpacesInRow += 1
+    if (emptySpaces === 2 && stringToParse.charAt(i + 1) !== ' ') { twoEmptySpacesInRow += 1 }
     if (twoEmptySpacesInRow === 2) {
       startOfReceiver = i + 1
       break
@@ -295,11 +294,9 @@ const parseBankTransferReceiverOrSender = (stringToParse) => {
 }
 
 // Forwards it to parseBankTransferReceiverOrSender because their format is same
-const parseWebPaymentReceiver = (stringToParse) =>
-  parseBankTransferReceiverOrSender(stringToParse)
+const parseWebPaymentReceiver = (stringToParse) => parseBankTransferReceiverOrSender(stringToParse)
 
-const parseLoanLender = (stringToParse) =>
-  parseBankTransferReceiverOrSender(stringToParse)
+const parseLoanLender = (stringToParse) => parseBankTransferReceiverOrSender(stringToParse)
 
 // '21040KWFHP        A  0209  Elisa Oyj                             20                                23.86 -',
 const parseMonthlyId = (stringToParse) => {

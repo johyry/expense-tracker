@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import Notification from './components/Misc/Notification'
 import LoginPanel from './components/Login/LoginPage'
@@ -26,20 +26,12 @@ const App = () => {
 
       <Notification />
 
-      <Switch>
-        <Route path="/transactions">
-          <TransactionsMain />
-        </Route>
-        <Route path="/login">
-          <LoginPanel />
-        </Route>
-        <Route path="/pdfupload">
-          <FileUploadPage />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/transactions" element={<TransactionsMain />}/>
+        <Route path="/login" element={<LoginPanel />}/>
+        <Route path="/pdfupload" element={<FileUploadPage />}/>
+        <Route path="/" element={<Home />}/>
+      </Routes>
     </div>
   )
 }

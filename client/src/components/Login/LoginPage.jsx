@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useNavigate  } from 'react-router-dom'
 import { handleLogIn } from '../../reducers/loginReducer'
 import Togglable from '../Misc/Togglable'
 
@@ -10,14 +10,14 @@ const LoginForm = () => {
 
   const dispatch = useDispatch()
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const handleLogin = async (event) => {
     event.preventDefault()
     dispatch(handleLogIn({ username, password }))
     setUsername('')
     setPassword('')
-    history.push('/')
+    navigate('/')
   }
 
   return (

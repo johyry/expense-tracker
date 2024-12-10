@@ -1,15 +1,15 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { handleLogOut } from '../../reducers/loginReducer'
 
 const UserLoggedInAndLogOut = ({ user }) => {
   const dispatch = useDispatch()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const logOut = () => {
     dispatch(handleLogOut())
-    history.push('/')
+    navigate('/')
   }
 
   return (
