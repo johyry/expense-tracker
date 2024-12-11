@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "cd client && npm start",
-    "lint": "eslint . --fix",
+    "lint": "eslint .",
     "server": "nodemon src/server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run client\" \"npm run server\"",
     "client:build": "cd client && npm run build"
@@ -32,16 +32,16 @@
     "husky": "^4.2.5",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.4",
-    "mongoose-unique-validator": "^4.0.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "pdf-parse": "^1.1.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "@stylistic/eslint-plugin-js": "^2.12.1",
     "cross-env": "^7.0.3",
-    "eslint": "^7.21.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint": "^9.16.0",
+    "globals": "^15.13.0",
     "nodemon": "^3.1.7",
     "prettier": "^2.2.1"
   }

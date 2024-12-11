@@ -9,7 +9,7 @@ const FileUploadPage = () => {
   const [isSelected, setIsSelected] = useState(false)
 
   const dispatch = useDispatch()
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const changeHandler = (event) => {
     const file = event.target.files[0]

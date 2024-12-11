@@ -6,6 +6,7 @@ const transactionParser = require('../bankstatementParser/parser')
 const transactionSaver = require('../utils/transactionsaver')
 const User = require('../models/user')
 const fileSaver = require('../utils/middleware/fileSaver')
+const { basedir } = require('../utils/config')
 
 fileRouter.post('/upload', async (req, res) => {
   try {
@@ -25,7 +26,7 @@ fileRouter.post('/upload', async (req, res) => {
       return res.status(400).send({ message: 'Please upload a file!' })
     }
 
-    const pathToFile = `${__basedir}/resources/static/assets/uploads/${req.file.originalname}`
+    const pathToFile = `${basedir}/resources/static/assets/uploads/${req.file.originalname}`
 
     // Parse pdf and get transactions
     const transactions = await transactionParser.parser(pathToFile)

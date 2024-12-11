@@ -1,11 +1,11 @@
 const notificationReducer = (state = '', action) => {
   switch (action.type) {
-    case 'DISPLAYNOTIFICATION':
-      return action.data
-    case 'REMOVENOTIFICATION':
-      return action.data
-    default:
-      return state
+  case 'DISPLAYNOTIFICATION':
+    return action.data
+  case 'REMOVENOTIFICATION':
+    return action.data
+  default:
+    return state
   }
 }
 

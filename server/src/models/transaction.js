@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')
 
 const options = { discriminatorKey: 'kind' }
 const transactionSchema = new mongoose.Schema(
@@ -30,8 +29,6 @@ const transactionSchema = new mongoose.Schema(
   },
   options,
 )
-
-transactionSchema.plugin(uniqueValidator)
 
 transactionSchema.set('toJSON', {
   transform: (document, returnedObject) => {

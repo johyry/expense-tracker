@@ -20,7 +20,7 @@
     "build": "vite build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint .",
+    "lint": "eslint . --ext js,jsx",
     "lintFix": "eslint --fix ."
   },
   "browserslist": {
@@ -38,18 +38,15 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
     "deep-freeze": "0.0.1",
-    "eslint": "^7.19.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint": "^8.45.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.3",
     "json-server": "^0.16.3",
     "prettier": "^2.2.1",
     "react-refresh": "^0.8.3",
-    "vite": "^6.0.3"
+    "vite": "^4.4.5"
   },
   "proxy": "http://localhost:3002"
 }

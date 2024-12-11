@@ -105,7 +105,7 @@ const CategoryPage = ({ title, transactions }) => {
                 onChange={({ target }) => setFilter(target.value)}
               />
               {filteredTransactions.map((transaction) => (
-                <Transaction transaction={transaction} />
+                <Transaction key={transaction.monthlyTransactionId} transaction={transaction} />
               ))}
             </Togglable>
           </td>

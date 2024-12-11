@@ -3,15 +3,15 @@ import { handleNotifications } from './notificationReducer'
 
 const transactionReducer = (state = '', action) => {
   switch (action.type) {
-    case 'INITIALIZE_TRANSACTIONS':
-      return action.data.transactions
-    case 'CHANGECATEGORY': {
-      return state.map((transaction) =>
-        transaction.mongoId === action.data.mongoId ? action.data : transaction
-      )
-    }
-    default:
-      return state
+  case 'INITIALIZE_TRANSACTIONS':
+    return action.data.transactions
+  case 'CHANGECATEGORY': {
+    return state.map((transaction) =>
+      transaction.mongoId === action.data.mongoId ? action.data : transaction
+    )
+  }
+  default:
+    return state
   }
 }
 

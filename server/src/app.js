@@ -10,10 +10,11 @@ const loginRouter = require('./controllers/login')
 const fileRouter = require('./controllers/file')
 const transactionRouter = require('./controllers/transactions')
 const logger = require('./utils/logger')
+const { basedir } = require('./utils/config')
 
 const app = express()
 
-global.__basedir = __dirname
+console.log('works?', basedir)
 
 mongoose
   .connect(config.MONGODB_URI)
