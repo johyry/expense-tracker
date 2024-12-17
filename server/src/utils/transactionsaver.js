@@ -42,7 +42,6 @@ const saveTransactions = async (transactions, user) => {
     }
 
     if (transaction.type.includes('236')) {
-      console.log(transaction)
       toSave = new transactionModels.BankServiceChargeTransaction({
         ...transaction,
         user: user._id,

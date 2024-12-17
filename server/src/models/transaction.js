@@ -22,6 +22,9 @@ const transactionSchema = new mongoose.Schema(
     category: {
       type: String,
     },
+    receiver: {
+      type: String
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -55,11 +58,7 @@ const ReceivedBankTransferTransaction = Transaction.discriminator(
 )
 
 const sentBankTransferSchema = new mongoose.Schema(
-  {
-    receiver: {
-      type: String,
-    },
-  },
+  {},
   options,
 )
 
@@ -84,9 +83,6 @@ const LoanWithdrawalTransaction = Transaction.discriminator(
 
 const cardPaymentSchema = new mongoose.Schema(
   {
-    shop: {
-      type: String,
-    },
     location: {
       type: String,
     },
@@ -128,11 +124,7 @@ const BankServiceChargeTransaction = Transaction.discriminator(
 )
 
 const webPaymentSchema = new mongoose.Schema(
-  {
-    receiver: {
-      type: String,
-    },
-  },
+  {},
   options,
 )
 

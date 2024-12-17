@@ -18,6 +18,7 @@ const transactionReducer = (state = '', action) => {
 export const initializeTransactions = () => async (dispatch) => {
   try {
     const transactions = await transactionService.getAll()
+    console.log(transactions)
     dispatch({
       type: 'INITIALIZE_TRANSACTIONS',
       data: {

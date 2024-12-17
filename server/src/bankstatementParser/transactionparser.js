@@ -101,12 +101,12 @@ const parseTransaction = (array, monthAndYear) => {
 //   '                             XXXXX',
 //   ''
 const handleCardPayment = (array, payment) => {
-  const shop = parseShop(array[2])
+  const receiver = parseShop(array[2])
   const location = parseLocation(array[3])
 
   payment = {
     ...payment,
-    shop,
+    receiver,
     location,
   }
   return payment
@@ -241,9 +241,9 @@ const parseDay = (stringToParse) => {
 // Example
 //   '                             S MARKET NIHTISILTA',
 const parseShop = (stringToParse) => {
-  let shop = removeExtraWhiteSpace(stringToParse)
-  shop = shop.trimLeft()
-  return shop
+  let receiver = removeExtraWhiteSpace(stringToParse)
+  receiver = receiver.trimLeft()
+  return receiver
 }
 
 // Example
