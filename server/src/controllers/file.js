@@ -1,21 +1,15 @@
 const fs = require('fs')
 const fileRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
 const multer = require('multer')
 const { fileFilter } = require('../utils/middleware/file')
 const upload = multer({ dest: 'resources/static/assets/uploads/', fileFilter })
 const transactionParser = require('../bankstatementParser/parser')
 const transactionSaver = require('../utils/transactionsaver')
-const User = require('../models/user')
+const { userExtractor } = require('../utils/middleware/middleware')
 
-fileRouter.post('/upload', upload.single('file'), async (req, res) => {
+fileRouter.post('/upload', [userExtractor, upload.single('file')], async (req, res) => {
   try {
-    const token = req.token
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-    if (!token || !decodedToken.id) {
-      return res.status(401).json({ error: 'token missing or invalid' })
-    }
-    const user = await User.findById(decodedToken.id)
+    const user = req.user
 
     if (req.file === undefined) {
       return res.status(400).send({ message: 'Please upload a file!' })
