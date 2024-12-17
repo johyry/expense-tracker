@@ -4,6 +4,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
+
 const middleware = require('./utils/middleware/middleware')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')

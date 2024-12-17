@@ -1,14 +1,14 @@
 const fs = require('fs')
 const fileRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
-
+const multer = require('multer')
+const { fileFilter } = require('../utils/middleware/file')
+const upload = multer({ dest: 'resources/static/assets/uploads/', fileFilter })
 const transactionParser = require('../bankstatementParser/parser')
 const transactionSaver = require('../utils/transactionsaver')
 const User = require('../models/user')
-const fileSaver = require('../utils/middleware/fileSaver')
-const { basedir } = require('../utils/config')
 
-fileRouter.post('/upload', async (req, res) => {
+fileRouter.post('/upload', upload.single('file'), async (req, res) => {
   try {
     const token = req.token
     const decodedToken = jwt.verify(token, process.env.SECRET)
@@ -17,16 +17,11 @@ fileRouter.post('/upload', async (req, res) => {
     }
     const user = await User.findById(decodedToken.id)
 
-    // uploads the file to temporar folder to be processed
-    await fileSaver.uploader(req, res)
-
-    console.log('req:', req)
-
     if (req.file === undefined) {
       return res.status(400).send({ message: 'Please upload a file!' })
     }
 
-    const pathToFile = `${basedir}/resources/static/assets/uploads/${req.file.originalname}`
+    const pathToFile = `resources/static/assets/uploads/${req.file.filename}`
 
     // Parse pdf and get transactions
     const transactions = await transactionParser.parser(pathToFile)
