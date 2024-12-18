@@ -1,7 +1,6 @@
 const transactionRouter = require('express').Router()
 const { userExtractor } = require('../utils/middleware/middleware')
 const { Transaction } = require('../models/transaction')
-const { v4: uuidv4 } = require('uuid')
 
 transactionRouter.get('/', userExtractor, async (request, response) => {
   const user = request.user
