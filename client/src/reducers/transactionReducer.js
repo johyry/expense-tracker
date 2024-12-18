@@ -18,7 +18,6 @@ export const transactionSlice = createSlice({
 export const initializeTransactions = () => async (dispatch) => {
   try {
     const transactions = await transactionService.getAll()
-    console.log(transactions)
     dispatch(initialize(transactions))
   } catch (exception) {
     handleNotifications('Fetching all transactions failed', 'error')

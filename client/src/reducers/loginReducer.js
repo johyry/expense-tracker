@@ -10,12 +10,8 @@ export const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    login: (state, action) => {
-      return (action.payload)
-    },
-    logout: (state) => {
-      return ({})
-    }
+    login: (state, action) => (action.payload),
+    logout: (state) => ({})
   }
 })
 
@@ -27,8 +23,9 @@ export const handleLogIn = (credentials) => {
       transactionService.setToken(loggedInUser.token)
       fileUploadService.setToken(loggedInUser.token)
       dispatch(login(loggedInUser))
+      return loggedInUser
     } catch (exception) {
-      handleNotifications('Login failed')
+      dispatch(handleNotifications('An unexpected error occurred.'))
     }
   }
 }
