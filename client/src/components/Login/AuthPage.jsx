@@ -90,7 +90,7 @@ const AuthPage = ({ isRegister = false }) => {
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           {notification && <Alert severity="success" sx={{ mb: 2 }}>{notification}</Alert>}
           <TextField
-            placeholder="Enter username"
+            label="Username"
             fullWidth
             required
             autoFocus
@@ -99,7 +99,7 @@ const AuthPage = ({ isRegister = false }) => {
             onChange={({ target }) => setUsername(target.value)}
           />
           <TextField
-            placeholder="Enter password"
+            label="Password"
             fullWidth
             required
             type="password"
@@ -109,7 +109,7 @@ const AuthPage = ({ isRegister = false }) => {
           />
           {isRegister && (
             <TextField
-              placeholder="Confirm password"
+              label="Confirm password"
               fullWidth
               required
               type="password"

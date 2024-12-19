@@ -5,7 +5,6 @@ const transactionSchema = new mongoose.Schema(
   {
     bankId: {
       type: String,
-      unique: true,
     },
     sum: {
       type: Number,

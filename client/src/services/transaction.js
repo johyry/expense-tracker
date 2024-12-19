@@ -8,12 +8,21 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
 
+const createTransaction = async (newTransaction) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const response = await axios.post(baseUrl, newTransaction, config)
+  return response.data
+}
+
 const getAll = async () => {
   const config = {
     headers: { Authorization: token },
   }
 
   const response = await axios.get(baseUrl, config)
+  console.log(response.data)
   return response.data
 }
 
@@ -31,4 +40,4 @@ const changeCategory = async (details) => {
   return response.data
 }
 
-export default { getAll, setToken, changeCategory }
+export default { createTransaction, getAll, setToken, changeCategory }

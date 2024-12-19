@@ -6,6 +6,9 @@ export const transactionSlice = createSlice({
   name: 'transaction',
   initialState: [],
   reducers: {
+    add: (state, action) => {
+      return (state.concat(action.payload))
+    },
     initialize: (state, action) => {
       return (action.payload)
     },
@@ -14,6 +17,12 @@ export const transactionSlice = createSlice({
     }
   }
 })
+
+export const addTransaction = (newTransaction) => async (dispatch) => {
+  const transaction = await transactionService.createTransaction(newTransaction)
+  dispatch(add(transaction))
+  return transaction
+}
 
 export const initializeTransactions = () => async (dispatch) => {
   try {
@@ -33,6 +42,6 @@ export const changeCategory = (details) => async (dispatch) => {
   }
 }
 
-export const { initialize, modify } = transactionSlice.actions
+export const { add, initialize, modify } = transactionSlice.actions
 
 export default transactionSlice.reducer
