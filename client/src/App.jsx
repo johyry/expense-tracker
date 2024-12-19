@@ -10,6 +10,7 @@ import FileUploadPage from './components/FileUpload/FileUpload'
 import TransactionsMain from './components/Transactions/TransactionsMain'
 import Home from './components/Home'
 import NavBar from './components/NavBar/NavBar'
+import AuthPage from './components/Login/AuthPage'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -29,9 +30,9 @@ const App = () => {
 
       <Routes>
         <Route path="/transactions" element={<TransactionsMain />}/>
-        <Route path="/login" element={<LoginPage />}/>
+        <Route path="/login" element={<AuthPage isRegister={false} />}/>
         <Route path="/pdfupload" element={<FileUploadPage />}/>
-        <Route path="/register" element={<CreateUser />}/>
+        <Route path="/register" element={<AuthPage isRegister={true} />}/>
         <Route path="/" element={<Home />}/>
       </Routes>
     </div>

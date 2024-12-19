@@ -17,16 +17,12 @@ export const loginSlice = createSlice({
 
 export const handleLogIn = (credentials) => {
   return async dispatch => {
-    try {
-      const loggedInUser = await loginService.login(credentials)
-      window.localStorage.setItem('loggedAppUser', JSON.stringify(loggedInUser))
-      transactionService.setToken(loggedInUser.token)
-      fileUploadService.setToken(loggedInUser.token)
-      dispatch(login(loggedInUser))
-      return loggedInUser
-    } catch (exception) {
-      dispatch(handleNotifications('An unexpected error occurred.'))
-    }
+    const loggedInUser = await loginService.login(credentials)
+    window.localStorage.setItem('loggedAppUser', JSON.stringify(loggedInUser))
+    transactionService.setToken(loggedInUser.token)
+    fileUploadService.setToken(loggedInUser.token)
+    dispatch(login(loggedInUser))
+    return loggedInUser
   }
 }
 
