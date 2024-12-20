@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "server": "nodemon src/server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run client\" \"npm run server\"",
-    "client:build": "cd client && npm run build"
+    "client:build": "cd client && npm run build",
+    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../client && npm run build && @powershell Copy-Item dist -Recurse ../server",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "repository": {
     "type": "git",
