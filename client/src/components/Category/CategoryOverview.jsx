@@ -1,51 +1,30 @@
 import React, { useState } from 'react'
 
-import Transaction from './Transaction'
+import Transaction from '../Transactions/Transaction'
 import Togglable from '../Misc/Togglable'
 import Filter from '../Misc/Filter'
+import { CategoryCard } from './CategoryCard'
+import { Grid2 } from '@mui/material'
 
 const CategoryOverview = ({ transactions }) => {
-  sortTransactionsByYearAndMonth(transactions)
-
+  //sortTransactionsByYearAndMonth(transactions)
   const categoriesAndTransactions = new Map()
 
   transactions.forEach((transaction) => {
-    if (categoriesAndTransactions.has(transaction.category)) {
-      categoriesAndTransactions.set(transaction.category, [
-        ...categoriesAndTransactions.get(transaction.category),
-        transaction,
-      ])
-    } else {
-      categoriesAndTransactions.set(transaction.category, [transaction])
+    if (!categoriesAndTransactions.has(transaction.category)) {
+      categoriesAndTransactions.set(transaction.category, [])
     }
+    categoriesAndTransactions.get(transaction.category).push(transaction)
   })
-
-  // const categories = []
-  // const listOfTransactionsPerCategory = []
-  // categoriesAndTransactions.forEach((value, key) => {
-  //   categories.push(key)
-  //   listOfTransactionsPerCategory.push(
-  //     <th>
-  //       {value.map((transaction) => (
-  //         <Transaction transaction={transaction} />
-  //       ))}
-  //     </th>
-  //   )
-  // })
-
-  const categoryPagesToDisplay = []
-  categoriesAndTransactions.forEach((value, key) => {
-    categoryPagesToDisplay.push(<CategoryPage title={key} transactions={value} />)
-  })
-
-  const style = {
-    display: 'flex',
-  }
 
   return (
     <div>
       <h2>Transaction categories:</h2>
-      <div style={style}>{categoryPagesToDisplay}</div>
+      <Grid2 container spacing={2} sx={{ padding: 2 }}>
+        {Array.from(categoriesAndTransactions.entries()).map(([category, transactions]) => (
+          <CategoryCard key={category} category={category} transactions={transactions} />
+        ))}
+      </Grid2>
     </div>
   )
 }
@@ -105,7 +84,7 @@ const CategoryPage = ({ title, transactions }) => {
                 onChange={({ target }) => setFilter(target.value)}
               />
               {filteredTransactions.map((transaction) => (
-                <Transaction key={transaction.monthlyTransactionId} transaction={transaction} />
+                <Transaction key={transaction.mongoId} transaction={transaction} />
               ))}
             </Togglable>
           </td>

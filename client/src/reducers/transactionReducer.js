@@ -9,6 +9,9 @@ export const transactionSlice = createSlice({
     add: (state, action) => {
       return (state.concat(action.payload))
     },
+    deleteTr: (state, action) => {
+      return state.filter((transaction) => transaction.mongoId !== action.payload)
+    },
     initialize: (state, action) => {
       return (action.payload)
     },
@@ -24,6 +27,12 @@ export const addTransaction = (newTransaction) => async (dispatch) => {
   return transaction
 }
 
+export const deleteTransaction = (id) => async (dispatch) => {
+  const success = await transactionService.deleteTransaction(id)
+  dispatch(deleteTr(id))
+  return success
+}
+
 export const initializeTransactions = () => async (dispatch) => {
   try {
     const transactions = await transactionService.getAll()
@@ -33,15 +42,12 @@ export const initializeTransactions = () => async (dispatch) => {
   }
 }
 
-export const changeCategory = (details) => async (dispatch) => {
-  try {
-    const newTransaction = await transactionService.changeCategory(details)
-    dispatch(modify(newTransaction))
-  } catch (exception) {
-    handleNotifications('Changing category failed. :(')
-  }
+export const updateTransaction = (details) => async (dispatch) => {
+  const newTransaction = await transactionService.updateTransaction(details)
+  dispatch(modify(newTransaction))
+  return newTransaction
 }
 
-export const { add, initialize, modify } = transactionSlice.actions
+export const { add, initialize, modify, deleteTr } = transactionSlice.actions
 
 export default transactionSlice.reducer

@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 // import { initializeTransactions } from '../../reducers/transactionReducer'
-import CategoryPage from './CategoryOverview'
+import CategoryPage from '../Category/CategoryOverview'
 
 const TransactionsMain = () => {
   // const dispatch = useDispatch()
@@ -14,13 +14,8 @@ const TransactionsMain = () => {
   if (!transactions) return null
 
   const yearMonth = divideTransactionsByYearAndMonth(transactions)
-  console.log('yearMonth', yearMonth)
   return (
     <div>
-      <p>Here there is gonna be the transactions page</p>
-      <p>2019, 2020, 2021</p>
-      <p>1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12</p>
-
       <CategoryPage transactions={transactions} />
     </div>
   )

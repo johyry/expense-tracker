@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { changeCategory } from '../../reducers/transactionReducer'
 
 const Div = styled.div`
   border: 1px solid #ccc !important;
@@ -28,20 +27,12 @@ const Div = styled.div`
 const Transaction = ({ transaction }) => {
   const [newCategory, setNewCategory] = useState('')
 
+
   const dispatch = useDispatch()
 
-  const initiateChangeCategory = (event) => {
-    event.preventDefault()
-    dispatch(
-      changeCategory({
-        id: transaction.mongoId,
-        category: newCategory,
-      })
-    )
-    setNewCategory('')
-  }
+  /*let typeToReturn = {}
 
-  let typeToReturn = {}
+  if (!transaction.kind) transaction.kind === 'Regular'
 
   if (transaction.kind === 'ReceivedBankTransfer') {
     typeToReturn = <ReceivedBankTransfer transaction={transaction} />
@@ -69,11 +60,22 @@ const Transaction = ({ transaction }) => {
 
   if (transaction.kind === 'WebPayment') {
     typeToReturn = <WebPayment transaction={transaction} />
-  }
+  }*/
 
-  const date = new Date(transaction.date)
+  //const date = new Date(transaction.date)
 
   return (
+    <div>
+      {transaction.receiver}<br/>
+      {transaction.sum}<br/>
+      {transaction.date}<br/>
+      {transaction.type}<br/>
+      {transaction.category}<br/>
+      {transaction.comment}<br/>
+    </div>
+  )
+
+  /*return (
     <Div>
       {typeToReturn}
       <p>Sum: {transaction.sum}</p>
@@ -89,7 +91,7 @@ const Transaction = ({ transaction }) => {
         <button type="submit">Save</button>
       </form>
     </Div>
-  )
+  )*/
 }
 
 const ReceivedBankTransfer = ({ transaction }) => (

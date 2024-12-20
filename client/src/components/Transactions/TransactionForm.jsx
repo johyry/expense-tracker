@@ -12,16 +12,17 @@ import {
   Select,
   MenuItem
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
 import { useDispatch } from 'react-redux'
-import { addTransaction } from '../../reducers/transactionReducer'
-import transaction from '../../services/transaction'
+import { addTransaction, updateTransaction } from '../../reducers/transactionReducer'
+import { useParams } from 'react-router-dom'
+import transactionService from '../../services/transaction'
 
-const NewTransaction = () => {
+const TransactionForm = () => {
   const [receiver, setReceiver] = useState('')
   const [sum, setSum] = useState('')
   const [date, setDate] = useState(dayjs())
@@ -30,8 +31,30 @@ const NewTransaction = () => {
   const [comment, setComment] = useState('')
   const [error, setError] = useState('')
   const [notification, setNotification] = useState('')
+  const [transactionToEdit, setTransactionToEdit] = useState(null)
 
   const dispatch = useDispatch()
+  const { id } = useParams()
+
+  useEffect(() => {
+    const getTransaction = async () => {
+      try {
+        const fetchedTransaction = await transactionService.getById(id)
+        if (fetchedTransaction) {
+          setReceiver(fetchedTransaction.receiver || '')
+          setSum(fetchedTransaction.sum || '')
+          setDate(fetchedTransaction.date ? dayjs(fetchedTransaction.date) : dayjs())
+          setType(fetchedTransaction.type || '')
+          setCategory(fetchedTransaction.category || 'Other')
+          setComment(fetchedTransaction.comment || '')
+          setTransactionToEdit(fetchedTransaction)
+        }
+      } catch (error) {
+        handleError(`Fetching transaction failed. ${error.response.data.error}`)
+      }
+    }
+    if (id) getTransaction()
+  }, [id])
 
   const handleError = (message) => {
     setError(message)
@@ -73,19 +96,29 @@ const NewTransaction = () => {
       handleError(validateError)
     } else {
       try {
-        const result = await dispatch(addTransaction(transaction))
-        if (result) {
-          setReceiver('')
-          setSum('')
-          setDate(dayjs())
-          setType('')
-          setCategory('')
-          setComment('')
-          handleNotification('Transaction created succesfully.')
+        if (transactionToEdit) {
+          const result = await dispatch(updateTransaction({ ...transaction, mongoId: transactionToEdit.mongoId }))
+          if (result) {
+            handleNotification('Transaction updated successfully.')
+          }
+        } else {
+          const result = await dispatch(addTransaction(transaction))
+          if (result) {
+            setReceiver('')
+            setSum('')
+            setDate(dayjs())
+            setType('')
+            setCategory('')
+            setComment('')
+            handleNotification('Transaction created succesfully.')
+          }
         }
       } catch (error) {
-        handleError(`Creating transaction failed. ${error.response.data.error}`)
-      }
+        if (transactionToEdit) {
+          handleError(`Updating transaction failed. ${error.response.data.error}`)
+        } else {
+          handleError(`Creating transaction failed. ${error.response.data.error}`)
+        }}
     }
   }
 
@@ -101,7 +134,8 @@ const NewTransaction = () => {
     <Container maxWidth="xs" sx={{ display: 'flex', justifyContent: 'flex-start' }}>
       <Paper elevation={10} sx={{ marginTop: 8, padding: 2, width: '100%' }}>
         <Typography component="h1" variant="h6" sx={{ mt: 2, mb: 2, textAlign: 'center' }}>
-              New Transaction
+          {transactionToEdit && <>Edit Transaction</>}
+          {!transactionToEdit && <>New Transaction</>}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, ml: 2, mr: 2 }}>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -165,7 +199,8 @@ const NewTransaction = () => {
             onChange={({ target }) => setComment(target.value)}
           />
           <Button type="submit" variant="contained" fullWidth sx={{ mt: 1, mb: 2 }}>
-                Add
+            {transactionToEdit && <>Edit</>}
+            {!transactionToEdit && <>Add</>}
           </Button>
         </Box>
       </Paper>
@@ -174,4 +209,4 @@ const NewTransaction = () => {
 }
 
 
-export default NewTransaction
+export default TransactionForm

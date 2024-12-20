@@ -16,7 +16,6 @@ const FileUploadPage = () => {
     if (validateFile(file)) {
       setSelectedFile(file)
       setIsSelected(true)
-      console.log('file:', file)
     }
   }
 

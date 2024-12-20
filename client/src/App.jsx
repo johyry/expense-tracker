@@ -6,10 +6,11 @@ import { checkForAlreadyLoggedInUser } from './reducers/loginReducer'
 import { initializeTransactions } from './reducers/transactionReducer'
 import FileUploadPage from './components/FileUpload/FileUpload'
 import TransactionsMain from './components/Transactions/TransactionsMain'
-import NewTransaction from './components/Transactions/NewTransaction'
+import TransactionForm from './components/Transactions/TransactionForm'
 import Home from './components/Home'
 import NavBar from './components/NavBar/NavBar'
 import AuthPage from './components/Login/AuthPage'
+import ExpenseTracker from './components/Category/CategoryCard'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -29,9 +30,10 @@ const App = () => {
 
       <Routes>
         <Route path="/transactions" element={<TransactionsMain />}/>
-        <Route path="/transactions/new" element={<NewTransaction />}/>
+        <Route path="/transactions/new" element={<TransactionForm />}/>
+        <Route path="/transactions/edit/:id" element={<TransactionForm />}/>
         <Route path="/login" element={<AuthPage isRegister={false} />}/>
-        <Route path="/pdfupload" element={<FileUploadPage />}/>
+        {/*<Route path="/pdfupload" element={<FileUploadPage />}/>*/}
         <Route path="/register" element={<AuthPage isRegister={true} />}/>
         <Route path="/" element={<Home />}/>
       </Routes>

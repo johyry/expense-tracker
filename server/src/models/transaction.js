@@ -24,6 +24,9 @@ const transactionSchema = new mongoose.Schema(
     receiver: {
       type: String
     },
+    comment: {
+      type: String
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

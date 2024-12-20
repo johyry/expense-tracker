@@ -91,9 +91,9 @@ const NavBar = () => {
               </Link>
             </Menu>
 
-            <Link to="/pdfupload" style={{ textDecoration: 'none', color: 'inherit' }}>
+            {/*<Link to="/pdfupload" style={{ textDecoration: 'none', color: 'inherit' }}>
               <Button color='inherit'>Upload Pdf</Button>
-            </Link>
+            </Link>*/}
             <Button onClick={logOut} color='inherit'>Log Out</Button>
           </Stack>
         )}

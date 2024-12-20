@@ -20,7 +20,6 @@ const upload = async (file) => {
     },
   }
   const response = await axios.post(baseUrl, formData, config)
-  console.log('response.data', response.data)
   return response.data
 }
 

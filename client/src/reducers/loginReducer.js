@@ -19,7 +19,7 @@ export const handleLogIn = (credentials) => {
   return async dispatch => {
     const loggedInUser = await loginService.login(credentials)
     window.localStorage.setItem('loggedAppUser', JSON.stringify(loggedInUser))
-    transactionService.setToken(loggedInUser.token)
+    transactionService.setConfig(loggedInUser.token)
     fileUploadService.setToken(loggedInUser.token)
     dispatch(login(loggedInUser))
     return loggedInUser
@@ -31,7 +31,7 @@ export const checkForAlreadyLoggedInUser = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
     if (loggedUserJSON) {
       const userLog = JSON.parse(loggedUserJSON)
-      transactionService.setToken(userLog.token)
+      transactionService.setConfig(userLog.token)
       fileUploadService.setToken(userLog.token)
       dispatch(login(userLog))
     }

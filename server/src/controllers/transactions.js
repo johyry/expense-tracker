@@ -11,10 +11,22 @@ transactionRouter.get('/', userExtractor, async (request, response) => {
   response.json(transactions)
 })
 
+transactionRouter.get('/:id', userExtractor, async (request, response) => {
+  const user = request.user
+  const id = request.params.id
+
+  const transaction = await Transaction.findById(id).populate('user', {
+    username: 1,
+  })
+
+  if (user.id !== transaction.user.id) return response.status(401).json({ error: 'Wrong user.' })
+
+  response.json(transaction)
+})
+
 transactionRouter.post('/', userExtractor, async (request, response) => {
   const user = request.user
   const body = request.body
-  console.log(body)
 
   const transaction = new Transaction({
     sum: body.sum,
@@ -23,10 +35,10 @@ transactionRouter.post('/', userExtractor, async (request, response) => {
     type: body.type,
     category: body.category,
     receiver: body.receiver,
+    comment: body.comment,
     user: user.id
   })
   const result = await transaction.save()
-  console.log(result)
   response.json(result)
 })
 
@@ -46,20 +58,17 @@ transactionRouter.delete('/:id', userExtractor, async (request, response) => {
 })
 
 transactionRouter.put('/:id', userExtractor, async (request, response) => {
-  const body = request.body
-  const transaction = await Transaction.findById(request.params.id)
-  transaction.category = body.category
+  const transactionCheck = await Transaction.findById(request.params.id)
 
-  if (transaction.user.toString() !== request.user.id) {
+  if (transactionCheck.user.toString() !== request.user.id) {
     return response.status(401).json({ error: 'Invalid token' })
   }
-
-  const updatedTransaction = await Transaction.findByIdAndUpdate(
-    request.params.id,
-    transaction,
-    { new: true },
+  const transaction = await Transaction.findByIdAndUpdate(request.params.id,
+    request.body,
+    { new: true }
   )
-  response.json(updatedTransaction.toJSON())
+
+  response.json(transaction.toJSON())
 })
 
 module.exports = transactionRouter
