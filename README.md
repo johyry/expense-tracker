@@ -12,7 +12,9 @@ Features:
 
 ### Play with the app:
 
-### https://expense-tracker-o7g5.onrender.com/
+### https://my-expensetracker.fly.dev/
+
+You can create your own user or use ```user: root, password: password```.
 
 Functionalities in future releases:
 - Overview page of expense categories

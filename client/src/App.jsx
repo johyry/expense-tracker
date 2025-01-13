@@ -11,13 +11,16 @@ import Home from './components/Home'
 import NavBar from './components/NavBar/NavBar'
 import AuthPage from './components/Login/AuthPage'
 import ExpenseTracker from './components/Category/CategoryCard'
+import { useSelector } from 'react-redux'
 
 const App = () => {
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.login)
+
 
   useEffect(() => {
     dispatch(checkForAlreadyLoggedInUser())
-    dispatch(initializeTransactions())
+    if (user) dispatch(initializeTransactions())
   }, [dispatch])
 
   return (

@@ -10,4 +10,5 @@ examplePdfs
 # misc
 .env
 
+/dist
 

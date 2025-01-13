@@ -12,7 +12,9 @@
     "dev": "concurrently --kill-others-on-fail \"npm run client\" \"npm run server\"",
     "client:build": "cd client && npm run build",
     "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../client && npm run build && @powershell Copy-Item dist -Recurse ../server",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "deploy": "fly deploy",
+    "logs:prod": "fly logs"
   },
   "repository": {
     "type": "git",
@@ -42,6 +44,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",
+    "@flydotio/dockerfile": "^0.6.1",
     "@stylistic/eslint-plugin-js": "^2.12.1",
     "cross-env": "^7.0.3",
     "eslint": "^9.16.0",
