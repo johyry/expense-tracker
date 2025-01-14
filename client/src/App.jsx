@@ -19,9 +19,12 @@ const App = () => {
 
 
   useEffect(() => {
-    dispatch(checkForAlreadyLoggedInUser())
-    if (user) dispatch(initializeTransactions())
-  }, [dispatch])
+    if (user.username) {
+      dispatch(initializeTransactions())
+    } else {
+      dispatch(checkForAlreadyLoggedInUser())
+    }
+  }, [dispatch, user])
 
   return (
     <div>

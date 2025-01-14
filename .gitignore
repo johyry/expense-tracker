@@ -7,6 +7,7 @@ server/src/bankstatementParser/examplePdfs
 server/fly.toml
 server/.dockerignore
 server/Dockerfile
+server/dist
 client/dist/index.html
 client/dist/index.html
 client/dist

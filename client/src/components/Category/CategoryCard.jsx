@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, TableHead, Grid2, Typography, Card, CardContent, Button, Collapse, Table, TableBody, TableCell, TableRow } from '@mui/material'
+import { Box, TableHead, Grid2, Typography, Card, CardContent, Button, Collapse, Table, TableBody, TableCell, TableRow, TableContainer, Paper } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import dayjs from 'dayjs'
@@ -9,8 +9,9 @@ import { Link } from 'react-router-dom'
 
 const categoryOverviewValues = (transactions) => {
   const totalSum = transactions.reduce((acc, transaction) => acc + transaction.sum, 0)
-  const averageSum = totalSum/transactions.length
+  const averageSum = (totalSum/transactions.length).toFixed(2)
   const amountOfTransactions = transactions.length
+
 
   return {
     totalSum,
@@ -49,37 +50,39 @@ export const CategoryCard = ({ category, transactions }) => {
           </Button>
 
           <Collapse in={open}>
-            <Table size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Receiver</TableCell>
-                  <TableCell align="right">Sum</TableCell>
-                  <TableCell align="right">Date</TableCell>
-                  <TableCell align="right">Type</TableCell>
-                  <TableCell align="right">Comment</TableCell>
-                  <TableCell align="right"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {transactions.map((transaction, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{transaction.receiver}</TableCell>
-                    <TableCell align="right">{transaction.sum} €</TableCell>
-                    <TableCell align="right">{dayjs(transaction.date).format('DD.MM.YYYY')}</TableCell>
-                    <TableCell align="right">{transaction.type}</TableCell>
-                    <TableCell align="right">{transaction.comment}</TableCell>
-                    <TableCell align="right">
-                      <Box display="flex" gap={1}>
-                        <Link to={`/transactions/edit/${transaction.mongoId}`}>
-                          <EditIcon sx={{ ':hover':{ color: 'orange' } }}/>
-                        </Link>
-                        <DeleteIcon sx={{ ':hover':{ color: 'red' } }} onClick={() => handleDelete(transaction.mongoId)}/>
-                      </Box>
-                    </TableCell>
+            <TableContainer component={Paper}>
+              <Table size="small" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Receiver</TableCell>
+                    <TableCell align="right">Sum</TableCell>
+                    <TableCell align="right">Date</TableCell>
+                    <TableCell align="right">Type</TableCell>
+                    <TableCell align="right">Comment</TableCell>
+                    <TableCell align="right"></TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {transactions.map((transaction, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{transaction.receiver}</TableCell>
+                      <TableCell align="right">{transaction.sum} €</TableCell>
+                      <TableCell align="right">{dayjs(transaction.date).format('DD.MM.YYYY')}</TableCell>
+                      <TableCell align="right">{transaction.type}</TableCell>
+                      <TableCell align="right">{transaction.comment}</TableCell>
+                      <TableCell align="right">
+                        <Box display="flex" gap={1}>
+                          <Link to={`/transactions/edit/${transaction.mongoId}`}>
+                            <EditIcon sx={{ ':hover':{ color: 'orange' } }}/>
+                          </Link>
+                          <DeleteIcon sx={{ ':hover':{ color: 'red' } }} onClick={() => handleDelete(transaction.mongoId)}/>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Collapse>
         </CardContent>
       </Card>
