@@ -12,6 +12,7 @@ import NavBar from './components/NavBar/NavBar'
 import AuthPage from './components/Login/AuthPage'
 import ExpenseTracker from './components/Category/CategoryCard'
 import { useSelector } from 'react-redux'
+import { initializeCategories } from './reducers/categoryReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -21,6 +22,7 @@ const App = () => {
   useEffect(() => {
     if (user.username) {
       dispatch(initializeTransactions())
+      dispatch(initializeCategories())
     } else {
       dispatch(checkForAlreadyLoggedInUser())
     }

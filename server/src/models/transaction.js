@@ -18,9 +18,6 @@ const transactionSchema = new mongoose.Schema(
     type: {
       type: String,
     },
-    category: {
-      type: String,
-    },
     receiver: {
       type: String
     },
@@ -31,6 +28,10 @@ const transactionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+    }
   },
   options,
 )

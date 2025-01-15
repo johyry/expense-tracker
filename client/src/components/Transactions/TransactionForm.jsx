@@ -21,13 +21,14 @@ import { useDispatch } from 'react-redux'
 import { addTransaction, updateTransaction } from '../../reducers/transactionReducer'
 import { useParams } from 'react-router-dom'
 import transactionService from '../../services/transaction'
+import { useSelector } from 'react-redux'
 
 const TransactionForm = () => {
   const [receiver, setReceiver] = useState('')
   const [sum, setSum] = useState('')
   const [date, setDate] = useState(dayjs())
   const [type, setType] = useState('')
-  const [category, setCategory] = useState('Other')
+  const [category, setCategory] = useState('')
   const [comment, setComment] = useState('')
   const [error, setError] = useState('')
   const [notification, setNotification] = useState('')
@@ -35,6 +36,8 @@ const TransactionForm = () => {
 
   const dispatch = useDispatch()
   const { id } = useParams()
+
+  const categories  = useSelector((state) => state.categories)
 
   useEffect(() => {
     const getTransaction = async () => {
@@ -45,7 +48,7 @@ const TransactionForm = () => {
           setSum(fetchedTransaction.sum || '')
           setDate(fetchedTransaction.date ? dayjs(fetchedTransaction.date) : dayjs())
           setType(fetchedTransaction.type || '')
-          setCategory(fetchedTransaction.category || 'Other')
+          setCategory(fetchedTransaction.category.name || '')
           setComment(fetchedTransaction.comment || '')
           setTransactionToEdit(fetchedTransaction)
         }
@@ -86,9 +89,11 @@ const TransactionForm = () => {
       sum,
       date,
       type,
-      category,
+      category: categories.find((cat) => cat.name === category),
       comment
     }
+
+    console.log('transaction', transaction)
 
     const validateError = validateInput()
 
@@ -183,14 +188,21 @@ const TransactionForm = () => {
               ))}
             </Select>
           </FormControl>
-          <TextField
-            label="Category"
-            fullWidth
-            required
-            sx={{ mb: 2 }}
-            value={category}
-            onChange={({ target }) => setCategory(target.value)}
-          />
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="type-label">Category</InputLabel>
+            <Select
+              labelId="type-label"
+              value={category}
+              label="Category"
+              onChange={({ target }) => setCategory(target.value)}
+            >
+              {categories.map((category) => (
+                <MenuItem key={category.name} value={category.name}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             label="Comment"
             fullWidth

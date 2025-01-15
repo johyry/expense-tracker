@@ -9,7 +9,7 @@ const loginRouter = require('./controllers/login')
 const fileRouter = require('./controllers/file')
 const transactionRouter = require('./controllers/transactions')
 const logger = require('./utils/logger')
-const path = require('path')
+const categoryRouter = require('./controllers/category')
 const app = express()
 
 mongoose
@@ -32,6 +32,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/file', fileRouter)
 app.use('/api/transaction', transactionRouter)
+app.use('/api/category', categoryRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

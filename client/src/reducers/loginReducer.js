@@ -1,5 +1,6 @@
 import loginService from '../services/login'
 import transactionService from '../services/transaction'
+import categoryService from '../services/category'
 import fileUploadService from '../services/fileUpload'
 import { handleNotifications } from './notificationReducer'
 import { createSlice } from '@reduxjs/toolkit'
@@ -20,6 +21,7 @@ export const handleLogIn = (credentials) => {
     const loggedInUser = await loginService.login(credentials)
     window.localStorage.setItem('loggedAppUser', JSON.stringify(loggedInUser))
     transactionService.setConfig(loggedInUser.token)
+    categoryService.setConfig(loggedInUser.token)
     fileUploadService.setToken(loggedInUser.token)
     dispatch(login(loggedInUser))
     return loggedInUser
@@ -32,6 +34,7 @@ export const checkForAlreadyLoggedInUser = () => {
     if (loggedUserJSON) {
       const userLog = JSON.parse(loggedUserJSON)
       transactionService.setConfig(userLog.token)
+      categoryService.setConfig(userLog.token)
       fileUploadService.setToken(userLog.token)
       dispatch(login(userLog))
     }
