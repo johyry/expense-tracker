@@ -6,8 +6,6 @@ import { Grid2 } from '@mui/material'
 const CategoryOverview = () => {
   const categories  = useSelector((state) => state.categories)
 
-  console.log('categories', categories)
-
   return (
     <div>
       <h2>Transaction categories:</h2>

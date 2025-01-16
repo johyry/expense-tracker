@@ -84,6 +84,7 @@ const TransactionForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
     const transaction = {
       receiver,
       sum,
@@ -92,8 +93,6 @@ const TransactionForm = () => {
       category: categories.find((cat) => cat.name === category),
       comment
     }
-
-    console.log('transaction', transaction)
 
     const validateError = validateInput()
 

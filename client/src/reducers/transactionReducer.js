@@ -31,20 +31,10 @@ export const addTransaction = (newTransaction) => async (dispatch, getState) => 
   const categories = getState().categories
   const category = categories.find(c => c.id === transaction.category)
   if (category) {
-    console.log('category found', category)
     const updatedCategory = {
       ...category,
-      transactions: [...category.transactions, {
-        sum: transaction.sum,
-        date: transaction.date,
-        type: transaction.type,
-        receiver: transaction.receiver,
-        user: transaction.user,
-        category: transaction.category,
-        mongoId: transaction.mongoId
-      }]
+      transactions: [...category.transactions, transaction]
     }
-    console.log('updatedCat', updatedCategory)
     dispatch(modifyCategory(updatedCategory))
   }
 
@@ -76,28 +66,27 @@ export const updateTransaction = (details) => async (dispatch, getState) => {
   const newTransaction = await transactionService.updateTransaction(details)
   dispatch(modify(newTransaction))
 
-  // Update category's transactions array
   const categories = getState().categories
-  const categoryToUpdate = categories.find(category =>
-    category.transactions.some(t => t.mongoId === newTransaction.mongoId)
-  )
+  const newCategory = categories.find(c => c.id === newTransaction.category)
+  const oldCategory = categories.find(c => c.transactions.some(t => t.id === newTransaction.id))
 
-  if (categoryToUpdate) {
+  if (newCategory.id !== oldCategory.id) { // If transaction's category has changed
+    if (newCategory) {
+      const updatedCategory = { ...newCategory, transactions: [ ...newCategory.transactions, newTransaction ] }
+      dispatch(modifyCategory(updatedCategory))
+    }
+
+    if (oldCategory) {
+      const updatedCategory = {
+        ...oldCategory,
+        transactions: oldCategory.transactions.filter(t => t.mongoId !== newTransaction.mongoId)
+      }
+      dispatch(modifyCategory(updatedCategory))
+    }
+  } else { // If transaction's category has not changed
     const updatedCategory = {
-      ...categoryToUpdate,
-      transactions: categoryToUpdate.transactions.map(t =>
-        t.mongoId === newTransaction.mongoId
-          ? {
-            sum: newTransaction.sum,
-            date: newTransaction.date,
-            type: newTransaction.type,
-            receiver: newTransaction.receiver,
-            user: newTransaction.user,
-            category: newTransaction.category,
-            mongoId: newTransaction.mongoId
-          }
-          : t
-      )
+      ...newCategory,
+      transactions: newCategory.transactions.map(t => t.mongoId === newTransaction.mongoId ? newTransaction : t)
     }
     dispatch(modifyCategory(updatedCategory))
   }

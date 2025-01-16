@@ -16,13 +16,7 @@ export const categorySlice = createSlice({
       return (action.payload)
     },
     modify: (state, action) => {
-      console.log('existing state', state)
-      console.log('action.payload', action.payload)
-      console.log('modified state', state.map((category) => {
-        console.log('category.mongoId', category)
-        console.log('action.payload.mongoId', action.payload)
-        return category.mongoId === action.payload.mongoId ? action.payload : category}))
-      return state.map((category) => category.mongoId === action.payload.mongoId ? action.payload : category)
+      return state.map((category) => category.id === action.payload.id ? action.payload : category)
     }
   }
 })
