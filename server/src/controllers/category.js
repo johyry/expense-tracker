@@ -61,10 +61,17 @@ categoryRouter.put('/:id', userExtractor, async (request, response) => {
     return response.status(401).json({ error: 'Invalid user' })
   }
 
+  if (!request.body.name || request.body.name.length < 3) {
+    return response.status(400).json({ error: 'Category name is too short' })
+  }
+
+  categoryCheck.name = request.body.name
+
   const updatedCategory = await Category.findByIdAndUpdate(request.params.id,
-    request.body,
+    categoryCheck,
     { new: true }
-  )
+  ).populate('user', { username: 1 })
+    .populate('transactions')
 
   response.json(updatedCategory)
 })

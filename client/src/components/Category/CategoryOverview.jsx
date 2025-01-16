@@ -11,7 +11,7 @@ const CategoryOverview = () => {
       <h2>Transaction categories:</h2>
       <Grid2 container spacing={2} sx={{ padding: 2 }}>
         {categories.map((category) => (
-          <CategoryCard key={category.name} category={category.name} transactions={category.transactions} />
+          <CategoryCard key={category.name} category={category} />
         ))}
       </Grid2>
     </div>

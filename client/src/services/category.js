@@ -26,7 +26,7 @@ const deleteCategory = async (id) => {
 }
 
 const updateCategory = async (details) => {
-  const response = await axios.put(`${baseUrl}/${details.mongoId}`,
+  const response = await axios.put(`${baseUrl}/${details.id}`,
     details,
     config
   )
