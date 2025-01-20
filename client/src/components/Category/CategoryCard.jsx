@@ -3,9 +3,11 @@ import { Box, TableHead, Grid2, Typography, Card, CardContent, Button, Collapse,
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import AddIcon from '@mui/icons-material/Add'
 import CancelIcon from '@mui/icons-material/Cancel'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import Tooltip from '@mui/material/Tooltip'
 import dayjs from 'dayjs'
 import { useDispatch } from 'react-redux'
 import { deleteTransaction } from '../../reducers/transactionReducer'
@@ -42,12 +44,7 @@ export const CategoryCard = ({ category }) => {
 
   const handleSave = async (event) => {
     event.preventDefault()
-    console.log('Save clicked', categoryName)
     const result = await dispatch(updateCategory({ ...category, name: categoryName }))
-    console.log('res', result)
-    // Here you would dispatch an action to update the category name
-    // dispatch(updateCategory({ ...category, name: categoryName }));
-    //setIsEditing(false)
   }
 
   const handleCancelEdit = () => {
@@ -103,14 +100,23 @@ export const CategoryCard = ({ category }) => {
                 </>
               ) : (
                 <>
-                  <EditIcon
-                    sx={{ cursor: 'pointer', ':hover': { color: 'orange' } }}
-                    onClick={handleEditClick}
-                  />
-                  <DeleteIcon
-                    sx={{ cursor: 'pointer', ':hover': { color: 'red' } }}
-                    onClick={handleDelete}
-                  />
+                  <Link to='/transactions/new' color='black'>
+                    <Tooltip title="Add new transaction" arrow>
+                      <AddIcon sx={{ color: 'black', cursor: 'pointer', ':hover': { color: 'green' } }}/>
+                    </Tooltip>
+                  </Link>
+                  <Tooltip title="Edit category name" arrow>
+                    <EditIcon
+                      sx={{ cursor: 'pointer', ':hover': { color: 'orange' } }}
+                      onClick={handleEditClick}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete category" arrow>
+                    <DeleteIcon
+                      sx={{ cursor: 'pointer', ':hover': { color: 'red' } }}
+                      onClick={handleDelete}
+                    />
+                  </Tooltip>
                 </>
               )}
             </Box>
@@ -156,9 +162,13 @@ export const CategoryCard = ({ category }) => {
                       <TableCell align="right">
                         <Box display="flex" gap={1}>
                           <Link to={`/transactions/edit/${transaction.mongoId}`}>
-                            <EditIcon sx={{ cursor: 'pointer', ':hover': { color: 'orange' } }}/>
+                            <Tooltip title="Edit transaction" arrow>
+                              <EditIcon sx={{ color: 'black', cursor: 'pointer', ':hover': { color: 'orange' } }}/>
+                            </Tooltip>
                           </Link>
-                          <DeleteIcon sx={{ color: 'black', cursor: 'pointer', ':hover': { color: 'red' } }} onClick={() => handleTransactionDelete(transaction.mongoId)}/>
+                          <Tooltip title="Delete transaction" arrow>
+                            <DeleteIcon sx={{ color: 'black', cursor: 'pointer', ':hover': { color: 'red' } }} onClick={() => handleTransactionDelete(transaction.mongoId)}/>
+                          </Tooltip>
                         </Box>
                       </TableCell>
                     </TableRow>
