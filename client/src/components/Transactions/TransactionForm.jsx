@@ -87,7 +87,7 @@ const TransactionForm = () => {
 
     const transaction = {
       receiver,
-      sum,
+      sum: parseFloat(sum).toFixed(2),
       date,
       type,
       category: categories.find((cat) => cat.name === category),

@@ -68,7 +68,7 @@ export const updateTransaction = (details) => async (dispatch, getState) => {
 
   const categories = getState().categories
   const newCategory = categories.find(c => c.id === newTransaction.category)
-  const oldCategory = categories.find(c => c.transactions.some(t => t.id === newTransaction.id))
+  const oldCategory = categories.find(c => c.transactions.some(t => t.mongoId === newTransaction.mongoId))
 
   if (newCategory.id !== oldCategory.id) { // If transaction's category has changed
     if (newCategory) {

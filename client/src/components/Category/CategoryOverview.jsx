@@ -67,7 +67,7 @@ const CategoryOverview = () => {
               <Typography variant="body2">Total Cost: {overviewValues.totalAmount} €</Typography>
               <Typography variant="body2">Average: {overviewValues.average} €</Typography>
               <Typography variant="body2">Expenses: {overviewValues.amountOfExpenses}</Typography>
-              <Stack direction="row" width="100%" textAlign="center" justifyContent='space-evenly' spacing={2}>
+              <Stack   direction={{ xs: 'column', sm: 'row' }} width="100%" textAlign="center" justifyContent='space-evenly' spacing={2}>
                 <Box
                   flexGrow={1}
                   display="flex"
@@ -110,7 +110,7 @@ const calculateCategoryOverviewValues = (categories) => {
     if (category.transactions.length === 0) return acc
     return acc + category.transactions.length
   }, 0)
-  const average = totalAmount / amountOfExpenses
+  const average = (totalAmount / amountOfExpenses).toFixed(2)
   return { totalAmount, amountOfExpenses, average }
 }
 
