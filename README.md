@@ -2,13 +2,15 @@
 
 Track your expenses conveniently with expense tracker. 
 
-### Release 1.0
+### Release 2.0
 
 Features:
 - Create user
 - Log in/log out
 - Add/modify/delete transactions
+- Add/modify/delete categories
 - Show transactions based on their category
+- Graphs to demonstrate category data
 
 ### Play with the app:
 
@@ -16,9 +18,26 @@ Features:
 
 You can create your own user or use ```user: root, password: password```.
 
-Functionalities in future releases:
-- Overview page of expense categories
-    - Graphs, %'s of each category
+![alt text](https://github.com/johyry/expense-tracker/blob/main/documentation/expense-tracker.png?raw=true)
+
+
+**Technologies used**
+
+Frontend:
+- React
+- MaterialUI
+- React Router
+- Redux
+
+Backend:
+- Node.js/Express
+
+DB:
+-  MongoDB
+
+
+
+**Functionalities in future releases:**
 - View expenses sorted by month
     - How much money went where each month
 - Overview page of monthly expenses

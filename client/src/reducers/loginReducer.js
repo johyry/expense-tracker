@@ -12,7 +12,7 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => (action.payload),
-    logout: (state) => ({})
+    logout: (state) => ({}),
   }
 })
 
@@ -48,6 +48,6 @@ export const handleLogOut = () => {
   }
 }
 
-export const { login, logout, doothing } = loginSlice.actions
+export const { login, logout } = loginSlice.actions
 
 export default loginSlice.reducer
