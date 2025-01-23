@@ -11,12 +11,12 @@ import { addCategory } from '../../reducers/categoryReducer'
 import Pie from '../Charts/Pie'
 import Barchart from '../Charts/Bar'
 
-const CategoryOverview = () => {
+const CategoryOverview = ({ sortedCategories }) => {
   const [openNewCategory, setOpenNewCategory] = useState(false)
   const [categoryName, setCategoryName] = useState('')
   const dispatch = useDispatch()
 
-  const categories  = useSelector((state) => state.categories)
+  const categories = sortedCategories
 
   const overviewValues = calculateCategoryOverviewValues(categories)
   const specifiedCategoryValues = calculateSpecifiedCategoryValues(categories, overviewValues)
@@ -34,7 +34,7 @@ const CategoryOverview = () => {
           <Card>
             <CardContent>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6">Category overview</Typography>
+                <Typography variant="h6">Monthly overview</Typography>
                 <Box display="flex" gap={1}>
                   {openNewCategory ? (
                     <>

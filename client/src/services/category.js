@@ -20,6 +20,11 @@ const getAll = async () => {
   return response.data
 }
 
+const getAllSortedCategories = async () => {
+  const response = await axios.get(`${baseUrl}/sortedByYearAndMonth`, config)
+  return response.data
+}
+
 const deleteCategory = async (id) => {
   const response = await axios.delete(`${baseUrl}/${id}`, config)
   return response.data
@@ -33,4 +38,4 @@ const updateCategory = async (details) => {
   return response.data
 }
 
-export default { createCategory, getAll, setConfig, updateCategory, deleteCategory }
+export default { createCategory, getAll, getAllSortedCategories, setConfig, updateCategory, deleteCategory }

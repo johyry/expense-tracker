@@ -36,6 +36,7 @@ export const deleteCategory = (id) => async (dispatch) => {
 export const initializeCategories = () => async (dispatch) => {
   try {
     const categories = await categoryService.getAll()
+    const sortedCategories = await categoryService.getAllSortedCategories()
     dispatch(initialize(categories))
   } catch (exception) {
     handleNotifications('Fetching all categories failed', 'error')
