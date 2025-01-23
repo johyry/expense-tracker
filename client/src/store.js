@@ -4,7 +4,6 @@ import notificationReducer from './reducers/notificationReducer'
 import loginReducer from './reducers/loginReducer'
 import transactionReducer from './reducers/transactionReducer'
 import categoryReducer from './reducers/categoryReducer'
-import sortedCategoryReducer from './reducers/sortedCategoryReducer'
 
 const store = configureStore({
   reducer: {
@@ -12,7 +11,6 @@ const store = configureStore({
     login: loginReducer,
     transactions: transactionReducer,
     categories: categoryReducer,
-    sortedCategories: sortedCategoryReducer,
   }
 })
 

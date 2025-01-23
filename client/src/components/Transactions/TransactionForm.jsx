@@ -37,7 +37,8 @@ const TransactionForm = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
 
-  const categories  = useSelector((state) => state.categories)
+  const sortedCategories = useSelector((state) => state.categories)
+  const categories = findCategories(sortedCategories)
 
   useEffect(() => {
     const getTransaction = async () => {
@@ -121,6 +122,7 @@ const TransactionForm = () => {
         if (transactionToEdit) {
           handleError(`Updating transaction failed. ${error.response.data.error}`)
         } else {
+          console.log('error', error)
           handleError(`Creating transaction failed. ${error.response.data.error}`)
         }}
     }
@@ -219,5 +221,15 @@ const TransactionForm = () => {
   )
 }
 
+const findCategories = (sortedCategories) => {
+  for (let year in sortedCategories) {
+    for (let month in sortedCategories[year]) {
+      if (sortedCategories[year][month] && sortedCategories[year][month].categories) {
+        return sortedCategories[year][month].categories
+      }
+    }
+  }
+  return null
+}
 
 export default TransactionForm

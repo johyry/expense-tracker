@@ -23,22 +23,37 @@ export const transactionSlice = createSlice({
   }
 })
 
-export const addTransaction = (newTransaction) => async (dispatch, getState) => {
-  const transaction = await transactionService.createTransaction(newTransaction)
-  dispatch(add(transaction))
+export const addTransaction = (newTransactionDetails) => async (dispatch, getState) => {
+  console.log('newTransactionDetails', newTransactionDetails)
+  const newTransaction = await transactionService.createTransaction(newTransactionDetails)
+  console.log('newTransaction', newTransaction)
+
+  dispatch(add(newTransaction))
 
   // Update category's transactions array
+
+  // etsi ensin vuosi ja kuukausi
+  const date = new Date(newTransaction.date)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+
   const categories = getState().categories
-  const category = categories.find(c => c.id === transaction.category)
+
+  // hae oikea kategoria vuoden ja kuukauden perusteella
+  const category = categories[year][month].categories.find(c => c.id === newTransaction.category)
+
+  console.log('newTransaction', newTransaction)
+  console.log('category', category)
+
   if (category) {
     const updatedCategory = {
       ...category,
-      transactions: [...category.transactions, transaction]
+      transactions: [...category.transactions, newTransaction]
     }
-    dispatch(modifyCategory(updatedCategory))
+    dispatch(modifyCategory({ category: updatedCategory, year, month }))
   }
 
-  return transaction
+  return newTransaction
 }
 
 export const deleteTransaction = (id) => async (dispatch, getState) => {
