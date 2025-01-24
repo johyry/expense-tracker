@@ -15,11 +15,8 @@ export const categorySlice = createSlice({
     initialize: (state, action) => {
       return (action.payload)
     },
-    modify: (state, action) => { // action.payload = { category, year, month}
-      const { category, year, month } = action.payload
-      const categories = state[year][month].categories.map((c) => c.id === category.id ? category : c)
-      state[year][month].categories = categories
-      return state
+    modify: (state, action) => {
+      return state.map((category) => category.id === action.payload.id ? action.payload : category)
     }
   }
 })
@@ -39,8 +36,7 @@ export const deleteCategory = (id) => async (dispatch) => {
 export const initializeCategories = () => async (dispatch) => {
   try {
     const categories = await categoryService.getAll()
-    const sortedCategories = await categoryService.getAllSortedCategories()
-    dispatch(initialize(sortedCategories))
+    dispatch(initialize(categories))
   } catch (exception) {
     handleNotifications('Fetching all categories failed', 'error')
   }

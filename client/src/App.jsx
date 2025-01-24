@@ -13,6 +13,7 @@ import AuthPage from './components/Login/AuthPage'
 import ExpenseTracker from './components/Category/CategoryCard'
 import { useSelector } from 'react-redux'
 import { initializeCategories } from './reducers/categoryReducer'
+import { initializeSortedCategories } from './reducers/sortedCategoryReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -23,6 +24,7 @@ const App = () => {
     if (user.username) {
       dispatch(initializeTransactions())
       dispatch(initializeCategories())
+      dispatch(initializeSortedCategories())
     } else {
       dispatch(checkForAlreadyLoggedInUser())
     }

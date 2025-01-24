@@ -9,7 +9,7 @@ const TransactionsMain = () => {
   const [availableMonths, setAvailableMonths] = useState([])
   const [categories, setCategories] = useState(null)
 
-  const sortedCategories = useSelector((state) => state.categories)
+  const sortedCategories = useSelector((state) => state.sortedCategories)
   console.log('sorted categories', sortedCategories)
 
   useEffect(() => {

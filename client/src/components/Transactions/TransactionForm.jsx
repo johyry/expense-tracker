@@ -37,8 +37,7 @@ const TransactionForm = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
 
-  const sortedCategories = useSelector((state) => state.categories)
-  const categories = findCategories(sortedCategories)
+  const categories = useSelector((state) => state.categories)
 
   useEffect(() => {
     const getTransaction = async () => {
@@ -197,7 +196,7 @@ const TransactionForm = () => {
               label="Category"
               onChange={({ target }) => setCategory(target.value)}
             >
-              {categories.map((category) => (
+              {categories && categories.map((category) => (
                 <MenuItem key={category.name} value={category.name}>
                   {category.name}
                 </MenuItem>
@@ -219,17 +218,6 @@ const TransactionForm = () => {
       </Paper>
     </Container>
   )
-}
-
-const findCategories = (sortedCategories) => {
-  for (let year in sortedCategories) {
-    for (let month in sortedCategories[year]) {
-      if (sortedCategories[year][month] && sortedCategories[year][month].categories) {
-        return sortedCategories[year][month].categories
-      }
-    }
-  }
-  return null
 }
 
 export default TransactionForm

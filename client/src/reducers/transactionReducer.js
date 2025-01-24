@@ -1,8 +1,8 @@
 import transactionService from '../services/transaction'
 import { handleNotifications } from './notificationReducer'
 import { createSlice } from '@reduxjs/toolkit'
-
-import { modify as modifyCategory } from './categoryReducer'
+import { produce } from 'immer'
+import { modify as modifySortedCategory } from './sortedCategoryReducer'
 
 export const transactionSlice = createSlice({
   name: 'transaction',
@@ -24,34 +24,42 @@ export const transactionSlice = createSlice({
 })
 
 export const addTransaction = (newTransactionDetails) => async (dispatch, getState) => {
-  console.log('newTransactionDetails', newTransactionDetails)
   const newTransaction = await transactionService.createTransaction(newTransactionDetails)
-  console.log('newTransaction', newTransaction)
 
-  dispatch(add(newTransaction))
-
-  // Update category's transactions array
-
-  // etsi ensin vuosi ja kuukausi
   const date = new Date(newTransaction.date)
   const year = date.getFullYear()
   const month = date.getMonth() + 1
 
-  const categories = getState().categories
-
-  // hae oikea kategoria vuoden ja kuukauden perusteella
-  const category = categories[year][month].categories.find(c => c.id === newTransaction.category)
-
-  console.log('newTransaction', newTransaction)
-  console.log('category', category)
-
-  if (category) {
-    const updatedCategory = {
-      ...category,
-      transactions: [...category.transactions, newTransaction]
+  const updatedSortedCategories = produce(getState().sortedCategories, draft => {
+    if (!draft[year]) {
+      draft[year] = {}
     }
-    dispatch(modifyCategory({ category: updatedCategory, year, month }))
-  }
+    if (!draft[year][month]) {
+      draft[year][month] = { categories: [] }
+    }
+
+    const categoryIndex = draft[year][month].categories.findIndex(c => c.id === newTransaction.category)
+    if (categoryIndex !== -1) {
+      draft[year][month].categories[categoryIndex].transactions.push(newTransaction)
+    } else {
+      const categories = getState().categories
+
+      categories.forEach(category => {
+        const newCategory = {
+          id: category.id,
+          name: category.name,
+          transactions: []
+        }
+        if (newCategory.id === newTransaction.category) {
+          newCategory.transactions.push(newTransaction)
+        }
+        draft[year][month].categories.push(newCategory)
+      })
+    }
+  })
+
+  dispatch(modifySortedCategory(updatedSortedCategories))
+  dispatch(add(newTransaction))
 
   return newTransaction
 }
@@ -71,7 +79,7 @@ export const deleteTransaction = (id) => async (dispatch, getState) => {
       ...categoryToUpdate,
       transactions: categoryToUpdate.transactions.filter(t => t.mongoId !== id)
     }
-    dispatch(modifyCategory(updatedCategory))
+    dispatch(modifySortedCategory(updatedCategory))
   }
 
   return success
@@ -88,7 +96,7 @@ export const updateTransaction = (details) => async (dispatch, getState) => {
   if (newCategory.id !== oldCategory.id) { // If transaction's category has changed
     if (newCategory) {
       const updatedCategory = { ...newCategory, transactions: [ ...newCategory.transactions, newTransaction ] }
-      dispatch(modifyCategory(updatedCategory))
+      dispatch(modifySortedCategory(updatedCategory))
     }
 
     if (oldCategory) {
@@ -96,14 +104,14 @@ export const updateTransaction = (details) => async (dispatch, getState) => {
         ...oldCategory,
         transactions: oldCategory.transactions.filter(t => t.mongoId !== newTransaction.mongoId)
       }
-      dispatch(modifyCategory(updatedCategory))
+      dispatch(modifySortedCategory(updatedCategory))
     }
   } else { // If transaction's category has not changed
     const updatedCategory = {
       ...newCategory,
       transactions: newCategory.transactions.map(t => t.mongoId === newTransaction.mongoId ? newTransaction : t)
     }
-    dispatch(modifyCategory(updatedCategory))
+    dispatch(modifySortedCategory(updatedCategory))
   }
 
   return newTransaction
