@@ -64,23 +64,42 @@ export const addTransaction = (newTransactionDetails) => async (dispatch, getSta
   return newTransaction
 }
 
-export const deleteTransaction = (id) => async (dispatch, getState) => {
-  const success = await transactionService.deleteTransaction(id)
-  dispatch(deleteTr(id))
+export const deleteTransaction = (transaction) => async (dispatch, getState) => {
+  const success = await transactionService.deleteTransaction(transaction.mongoId)
+  dispatch(deleteTr(transaction.mongoId))
 
-  // Update category's transactions array
-  const categories = getState().categories
-  const categoryToUpdate = categories.find(category =>
-    category.transactions.some(t => t.mongoId === id)
-  )
+  const date = new Date(transaction.date)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
 
-  if (categoryToUpdate) {
-    const updatedCategory = {
-      ...categoryToUpdate,
-      transactions: categoryToUpdate.transactions.filter(t => t.mongoId !== id)
+  const updatedSortedCategories = produce(getState().sortedCategories, draft => {
+    const categoryIndex = draft[year][month].categories.findIndex(
+      category => category.id === transaction.category
+    )
+
+    if (categoryIndex !== -1) {
+      draft[year][month].categories[categoryIndex].transactions =
+        draft[year][month].categories[categoryIndex].transactions.filter(
+          t => t.mongoId !== transaction.mongoId
+        )
     }
-    dispatch(modifySortedCategory(updatedCategory))
-  }
+
+    // Check if all categories' transactions are empty
+    const allCategoriesEmpty = draft[year][month].categories.every(
+      category => category.transactions.length === 0
+    )
+
+    if (allCategoriesEmpty) {
+      delete draft[year][month]
+
+      // Check if the year is now empty
+      if (Object.keys(draft[year]).length === 0) {
+        delete draft[year]
+      }
+    }
+  })
+
+  dispatch(modifySortedCategory(updatedSortedCategories))
 
   return success
 }

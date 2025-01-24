@@ -60,10 +60,10 @@ export const CategoryCard = ({ category }) => {
 
   const overviewValues = categoryOverviewValues(category.transactions)
 
-  const handleTransactionDelete = async (id) => {
+  const handleTransactionDelete = async (transaction) => {
     try {
       if (window.confirm('Are you sure you want to delete this transaction?')) {
-        const result = await dispatch(deleteTransaction(id))
+        const result = await dispatch(deleteTransaction(transaction))
       }
     } catch (error) {
       console.log(error)
@@ -167,7 +167,7 @@ export const CategoryCard = ({ category }) => {
                             </Tooltip>
                           </Link>
                           <Tooltip title="Delete transaction" arrow>
-                            <DeleteIcon sx={{ color: 'black', cursor: 'pointer', ':hover': { color: 'red' } }} onClick={() => handleTransactionDelete(transaction.mongoId)}/>
+                            <DeleteIcon sx={{ color: 'black', cursor: 'pointer', ':hover': { color: 'red' } }} onClick={() => handleTransactionDelete(transaction)}/>
                           </Tooltip>
                         </Box>
                       </TableCell>

@@ -4,6 +4,7 @@ import { Grid2, Card, CardContent, Typography, FormControl, InputLabel, Select, 
 import CategoryOverview from '../Category/CategoryOverview'
 
 const TransactionsMain = () => {
+  const [previousYear, setPreviousYear] = useState('')
   const [selectedYear, setSelectedYear] = useState('')
   const [selectedMonth, setSelectedMonth] = useState('')
   const [availableMonths, setAvailableMonths] = useState([])
@@ -13,8 +14,13 @@ const TransactionsMain = () => {
   console.log('sorted categories', sortedCategories)
 
   useEffect(() => {
-    if (selectedYear) {
+    const yearExists = sortedCategories && Object.keys(sortedCategories).includes(String(selectedYear))
+    if (!yearExists) {
+      setSelectedYear('')
       setSelectedMonth('')
+    }
+
+    if (selectedYear && yearExists) {
       setAvailableMonths(Object.keys(sortedCategories[selectedYear]))
     }
   }, [selectedYear, sortedCategories])
@@ -28,6 +34,12 @@ const TransactionsMain = () => {
       setCategories(null)
     }
   }, [selectedYear, selectedMonth, sortedCategories])
+
+  const handleYearChange = (event) => {
+    if (selectedYear) setPreviousYear(selectedYear)
+    setSelectedMonth('')
+    setSelectedYear(event.target.value)
+  }
 
   return (
     <div>
@@ -43,7 +55,7 @@ const TransactionsMain = () => {
                   labelId="type-label"
                   value={selectedYear}
                   label="Year"
-                  onChange={({ target }) => setSelectedYear(target.value)}
+                  onChange={handleYearChange}
                 >
                   {Object.keys(sortedCategories).map((year) => (
                     <MenuItem key={year} value={year}>
