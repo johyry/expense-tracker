@@ -16,15 +16,6 @@ export const sortedCategorySlice = createSlice({
   }
 })
 
-export const initializeSortedCategories = () => async (dispatch) => {
-  try {
-    const sortedCategories = await categoryService.getAllSortedCategories()
-    dispatch(initialize(sortedCategories))
-  } catch (exception) {
-    handleNotifications('Fetching all categories failed', 'error')
-  }
-}
-
 export const updateSortedCategories = (categories) => (dispatch) => {
   try {
     const sortedCategories = sortCategoriesByDate(categories)

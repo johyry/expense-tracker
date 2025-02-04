@@ -13,7 +13,7 @@ import AuthPage from './components/Login/AuthPage'
 import ExpenseTracker from './components/Category/CategoryCard'
 import { useSelector } from 'react-redux'
 import { initializeCategories } from './reducers/categoryReducer'
-import { initializeSortedCategories, updateSortedCategories } from './reducers/sortedCategoryReducer'
+import { updateSortedCategories } from './reducers/sortedCategoryReducer'
 
 const App = () => {
   const dispatch = useDispatch()
