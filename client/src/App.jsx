@@ -13,22 +13,28 @@ import AuthPage from './components/Login/AuthPage'
 import ExpenseTracker from './components/Category/CategoryCard'
 import { useSelector } from 'react-redux'
 import { initializeCategories } from './reducers/categoryReducer'
-import { initializeSortedCategories } from './reducers/sortedCategoryReducer'
+import { initializeSortedCategories, updateSortedCategories } from './reducers/sortedCategoryReducer'
 
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.login)
+  const categories = useSelector((state) => state.categories)
 
 
   useEffect(() => {
     if (user.username) {
       dispatch(initializeTransactions())
       dispatch(initializeCategories())
-      dispatch(initializeSortedCategories())
     } else {
       dispatch(checkForAlreadyLoggedInUser())
     }
   }, [dispatch, user])
+
+  useEffect(() => {
+    if (categories.length !== 0) {
+      dispatch(updateSortedCategories(categories))
+    }
+  }, [dispatch, categories])
 
   return (
     <div>

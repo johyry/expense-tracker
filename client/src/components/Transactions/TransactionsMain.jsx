@@ -11,7 +11,6 @@ const TransactionsMain = () => {
   const [categories, setCategories] = useState(null)
 
   const sortedCategories = useSelector((state) => state.sortedCategories)
-  console.log('sorted categories', sortedCategories)
 
   useEffect(() => {
     const yearExists = sortedCategories && Object.keys(sortedCategories).includes(String(selectedYear))
