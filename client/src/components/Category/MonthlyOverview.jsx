@@ -11,15 +11,12 @@ import { addCategory } from '../../reducers/categoryReducer'
 import Pie from '../Charts/Pie'
 import Barchart from '../Charts/Bar'
 
-const CategoryOverview = ({ sortedCategories }) => {
+const MonthlyOverview = ({ monthlyData }) => {
   const [openNewCategory, setOpenNewCategory] = useState(false)
   const [categoryName, setCategoryName] = useState('')
   const dispatch = useDispatch()
 
-  const categories = sortedCategories
-
-  const overviewValues = calculateCategoryOverviewValues(categories)
-  const specifiedCategoryValues = calculateSpecifiedCategoryValues(categories, overviewValues)
+  const categories = monthlyData.categories
 
   const handleAddCategory = () => {
     dispatch(addCategory({ name: categoryName }))
@@ -64,10 +61,10 @@ const CategoryOverview = ({ sortedCategories }) => {
                   )}
                 </Box>
               </Box>
-              <Typography variant="body2">Total Cost: {overviewValues.totalAmount} €</Typography>
-              <Typography variant="body2">Average: {overviewValues.average} €</Typography>
-              <Typography variant="body2">Expenses: {overviewValues.amountOfExpenses}</Typography>
-              <Stack   direction={{ xs: 'column', sm: 'row' }} width="100%" textAlign="center" justifyContent='space-evenly' spacing={2}>
+              <Typography variant="body2">Total Cost: {monthlyData.totalMonthlyCosts} €</Typography>
+              <Typography variant="body2">Average: {monthlyData.averageMonthlyCost} €</Typography>
+              <Typography variant="body2">Expenses: {monthlyData.amountOfMonthlyExpenses}</Typography>
+              <Stack direction={{ xs: 'column', sm: 'row' }} width="100%" textAlign="center" justifyContent='space-evenly' spacing={2}>
                 <Box
                   flexGrow={1}
                   display="flex"
@@ -75,7 +72,7 @@ const CategoryOverview = ({ sortedCategories }) => {
                   alignItems="center"
                 >
                   <Typography variant="body2">Total cost (€)</Typography>
-                  <Barchart categories={specifiedCategoryValues} />
+                  <Barchart monthlyData={monthlyData} />
                 </Box>
                 <Box
                   flexGrow={1}
@@ -84,7 +81,7 @@ const CategoryOverview = ({ sortedCategories }) => {
                   alignItems="center"
                 >
                   <Typography variant="body2">% of total</Typography>
-                  <Pie categories={categories} categoryOverviewValues={overviewValues} />
+                  <Pie monthlyData={monthlyData} />
                 </Box>
               </Stack>
             </CardContent>
@@ -100,34 +97,4 @@ const CategoryOverview = ({ sortedCategories }) => {
   )
 }
 
-const calculateCategoryOverviewValues = (categories) => {
-  const totalAmount = categories.reduce((acc, category) => {
-    if (category.transactions.length === 0) return acc
-    const catTotal = category.transactions.reduce((acc, transaction) => acc + transaction.sum, 0)
-    return acc + catTotal
-  }, 0)
-  const amountOfExpenses = categories.reduce((acc, category) => {
-    if (category.transactions.length === 0) return acc
-    return acc + category.transactions.length
-  }, 0)
-  const average = (totalAmount / amountOfExpenses).toFixed(2)
-  return { totalAmount, amountOfExpenses, average }
-}
-
-const calculateSpecifiedCategoryValues = (categories, categoryOverviewValues) => {
-  return categories.map((category) => {
-    const newObj = { ...category }
-    newObj.totalSum = category.transactions.reduce((acc, transaction) => acc + transaction.sum, 0)
-    newObj.amountOfTransactions = category.transactions.length
-    if (newObj.totalSum !== 0) {
-      newObj.percentageOfTotal = (newObj.totalSum / categoryOverviewValues.totalAmount) * 100
-      newObj.averageSum = newObj.totalSum / newObj.amountOfTransactions
-    } else {
-      newObj.percentageOfTotal = 0
-      newObj.averageSum = 0
-    }
-    return newObj
-  })
-}
-
-export default CategoryOverview
+export default MonthlyOverview

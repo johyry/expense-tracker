@@ -6,13 +6,13 @@ const valueFormatter = (value) => {
   return `${value} €`
 }
 
-const Barchart = ({ categories }) => {
+const Barchart = ({ monthlyData }) => {
 
   let dataObj = [{}]
   let series = []
 
-  categories.forEach((category) => {
-    dataObj[0][category.name] = category.totalSum
+  monthlyData.categories.forEach((category) => {
+    dataObj[0][category.name] = category.totalCosts
     series.push({ dataKey: category.name, label: category.name, valueFormatter })
   })
 
@@ -29,6 +29,5 @@ const Barchart = ({ categories }) => {
     </BarChart>
   )
 }
-
 
 export default Barchart

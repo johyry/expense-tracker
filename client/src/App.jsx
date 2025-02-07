@@ -19,7 +19,9 @@ const App = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.login)
   const categories = useSelector((state) => state.categories)
+  const sortedCategories = useSelector((state) => state.sortedCategories)
 
+  console.log('sortedCats', sortedCategories)
 
   useEffect(() => {
     if (user.username) {

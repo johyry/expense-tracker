@@ -6,8 +6,8 @@ const valueFormatter = (item) => {
   return `${item.value} %`
 }
 
-const Pie = ({ categories, categoryOverviewValues }) => {
-  const data = calculateCategoryValuesForPie(categories, categoryOverviewValues)
+const Pie = ({ monthlyData }) => {
+  const data = calculateCategoryValuesForPie(monthlyData)
 
   return (
     <PieChart
@@ -26,13 +26,13 @@ const Pie = ({ categories, categoryOverviewValues }) => {
   )
 }
 
-const calculateCategoryValuesForPie = (categories, categoryOverviewValues) => {
-  return categories.map((category) => {
+const calculateCategoryValuesForPie = (monthlyData) => {
+  return monthlyData.categories.map((category) => {
     const newObj = { ...category }
     newObj.totalSum = category.transactions.reduce((acc, transaction) => acc + transaction.sum, 0)
     newObj.amountOfTransactions = category.transactions.length
     if (newObj.totalSum !== 0) {
-      newObj.value = ((newObj.totalSum / categoryOverviewValues.totalAmount) * 100).toFixed(2)
+      newObj.value = ((newObj.totalSum / monthlyData.totalMonthlyCosts) * 100).toFixed(2)
       newObj.averageSum = newObj.totalSum / newObj.amountOfTransactions
     } else {
       newObj.value = 0

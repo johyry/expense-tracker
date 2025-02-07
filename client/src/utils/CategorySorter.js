@@ -1,4 +1,4 @@
-export const sortCategoriesByDate = (categories) => {
+export const sortCategoriesByDateAndCalculateStatistics = (categories) => {
   // Get all unique transactions dates as YYYY/MM
   const dates = categories.flatMap(category =>
     category.transactions.map(t => {
@@ -8,7 +8,7 @@ export const sortCategoriesByDate = (categories) => {
   ).filter((date, index, self) => self.indexOf(date) === index)
 
   // Create sorted object
-  const sorted = dates.reduce((acc, dateStr) => {
+  const sortedByYearAndMonth = dates.reduce((acc, dateStr) => {
     const [year, month] = dateStr.split('/')
 
     if (!acc[year]) {
@@ -34,15 +34,47 @@ export const sortCategoriesByDate = (categories) => {
   }, {})
 
   // Sort years and months in descending order
-  return Object.keys(sorted)
+  const sortedDescending = Object.keys(sortedByYearAndMonth)
     .sort((a, b) => b - a)
     .reduce((acc, year) => {
-      acc[year] = Object.keys(sorted[year])
+      acc[year] = Object.keys(sortedByYearAndMonth[year])
         .sort((a, b) => b - a)
         .reduce((monthAcc, month) => {
-          monthAcc[month] = sorted[year][month]
+          monthAcc[month] = sortedByYearAndMonth[year][month]
           return monthAcc
         }, {})
       return acc
     }, {})
+
+  const addedStatisticsData = calculateSpecifiedValues(sortedDescending)
+
+  return addedStatisticsData
+}
+
+const calculateSpecifiedValues = (data) => {
+  Object.entries(data).forEach(([year, yearData]) => {
+    Object.entries(yearData).forEach(([month, monthData]) => {
+      let monthlyTotal = 0
+      let amountOfMonthlyExpenses = 0
+
+      monthData.categories.forEach(category => {
+        const categoryTotal = (category.transactions).reduce(
+          (sum, transaction) => sum + (transaction.sum),
+          0
+        )
+
+        category.totalCosts = categoryTotal
+        category.averageCosts = parseFloat((categoryTotal/category.transactions.length).toFixed(2))
+
+        monthlyTotal += categoryTotal
+        amountOfMonthlyExpenses += category.transactions.length
+      })
+
+      monthData.totalMonthlyCosts = monthlyTotal
+      monthData.amountOfMonthlyExpenses = amountOfMonthlyExpenses
+      monthData.averageMonthlyCost = parseFloat((monthlyTotal/amountOfMonthlyExpenses).toFixed(2))
+    })
+  })
+
+  return data
 }
