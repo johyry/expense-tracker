@@ -1,10 +1,10 @@
 # Expense tracker app
 
-Track your expenses conveniently with expense tracker. 
+## Overview
 
-### Release 2.0
+Easily track and manage your expenses with the Expense Tracker App. This app allows users to log their transactions, categorize expenses, and visualize spending patterns with interactive graphs.
 
-Features:
+## Features:
 - Create user
 - Log in/log out
 - Add/modify/delete transactions
@@ -12,37 +12,25 @@ Features:
 - Show transactions based on their category
 - Graphs to demonstrate category data
 
-### Play with the app:
+## Live Demo:
 
-### https://my-expensetracker.fly.dev/
+**https://my-expensetracker.fly.dev/**
 
-You can create your own user or use ```user: root, password: password```.
+You can create your own account or use the demo credentials with existing test data:
 
-![alt text](https://github.com/johyry/expense-tracker/blob/main/documentation/expense-tracker.png?raw=true)
+```user: root, password: password```
 
 
-**Technologies used**
+## Technologies used
 
-Frontend:
+**Frontend:**
 - React
 - MaterialUI
 - React Router
 - Redux
 
-Backend:
+**Backend:**
 - Node.js/Express
 
-DB:
+**DB:**
 -  MongoDB
-
-
-
-**Functionalities in future releases:**
-- View expenses sorted by month
-    - How much money went where each month
-- Overview page of monthly expenses
-    - Averages of each category
-    - Average expenses per month
-    - ...
-- Add expenses by uploading bank statement in PDF form to reduce manual typing
-
