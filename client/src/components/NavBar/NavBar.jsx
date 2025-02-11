@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux'
 import { handleLogOut } from '../../reducers/loginReducer'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import React, { useState } from 'react'
+import { cardStyle } from '../Styles/Card'
 
 const NavBar = () => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -39,16 +40,13 @@ const NavBar = () => {
 
   return (
 
-    <AppBar position='static' color='transparent'>
-      <Toolbar>
+    <AppBar sx={cardStyle} position='static' color='transparent'>
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <IconButton size='large' edge='start' color='inherit' aria-label='logo'>
-            <CatchingPokemonIcon />
-          </IconButton>
+          <Typography variant='h6' component='div' sx={{ paddingLeft: 1, flexGrow: 1, fontWeight: 'bold' }}>
+              Expense Tracker
+          </Typography>
         </Link>
-        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-            Expense Tracker
-        </Typography>
 
         {!user.username ? (
           <Stack direction='row' spacing={2} alignItems="center">

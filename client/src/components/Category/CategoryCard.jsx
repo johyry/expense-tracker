@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import { deleteTransaction } from '../../reducers/transactionReducer'
 import { Link } from 'react-router-dom'
 import { updateCategory } from '../../reducers/categoryReducer'
+import { cardStyle } from '../Styles/Card'
 
 const categoryOverviewValues = (transactions) => {
   const totalSum = transactions.reduce((acc, transaction) => acc + transaction.sum, 0)
@@ -72,7 +73,7 @@ export const CategoryCard = ({ category }) => {
 
   return (
     <Grid2 item='true' size={{ xs: 12, sm: 4 }}>
-      <Card>
+      <Card sx={cardStyle}>
         <CardContent>
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
             {isEditing ? (
@@ -122,7 +123,7 @@ export const CategoryCard = ({ category }) => {
             </Box>
           </Box>
           <Typography variant="body2">Total Cost: {overviewValues.totalSum} €</Typography>
-          <Typography variant="body2">Average: {overviewValues.averageSum} €</Typography>
+          <Typography variant="body2">Average expense cost: {overviewValues.averageSum} €</Typography>
           <Typography variant="body2">Expenses: {overviewValues.amountOfTransactions}</Typography>
 
           <Box display="flex" justifyContent={'flex-end'} gap={1} mr={0.3}>

@@ -4,24 +4,21 @@ import { useDispatch } from 'react-redux'
 import Notification from './components/Misc/Notification'
 import { checkForAlreadyLoggedInUser } from './reducers/loginReducer'
 import { initializeTransactions } from './reducers/transactionReducer'
-import FileUploadPage from './components/FileUpload/FileUpload'
 import TransactionsMain from './components/Transactions/TransactionsMain'
 import TransactionForm from './components/Transactions/TransactionForm'
 import Home from './components/Home'
 import NavBar from './components/NavBar/NavBar'
 import AuthPage from './components/Login/AuthPage'
-import ExpenseTracker from './components/Category/CategoryCard'
 import { useSelector } from 'react-redux'
 import { initializeCategories } from './reducers/categoryReducer'
 import { updateSortedCategories } from './reducers/sortedCategoryReducer'
+import { Grid2 } from '@mui/material'
 
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.login)
   const categories = useSelector((state) => state.categories)
   const sortedCategories = useSelector((state) => state.sortedCategories)
-
-  console.log('sortedCats', sortedCategories)
 
   useEffect(() => {
     if (user.username) {
@@ -40,9 +37,9 @@ const App = () => {
 
   return (
     <div>
-      <div>
+      <Grid2 sx={{ paddingLeft: 2, paddingRight: 2}}>
         <NavBar />
-      </div>
+      </Grid2>
 
       <Notification />
 

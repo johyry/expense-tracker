@@ -6,20 +6,33 @@ const valueFormatter = (value) => {
   return `${value} €`
 }
 
-const Barchart = ({ monthlyData }) => {
+const Barchart = ({ monthlyData, averageCategoryCosts }) => {
 
   let dataObj = [{}]
   let series = []
+  let height
+  let width
 
-  monthlyData.categories.forEach((category) => {
-    dataObj[0][category.name] = category.totalCosts
-    series.push({ dataKey: category.name, label: category.name, valueFormatter })
-  })
+  if (monthlyData) {
+    monthlyData.categories.forEach((category) => {
+      dataObj[0][category.name] = category.totalCosts
+      series.push({ dataKey: category.name, label: category.name, valueFormatter })
+    })
+    height = 250
+    width = 400
+  } else if (averageCategoryCosts) {
+    averageCategoryCosts.forEach((category) => {
+      dataObj[0][category.name] = category.average
+      series.push({ dataKey: category.name, label: category.name, valueFormatter })
+    })
+    height = 400
+    width = 600
+  }
 
   return (
     <BarChart
-      height={250}
-      width={400}
+      height={height}
+      width={width}
       colors={colors}
       dataset={dataObj}
       xAxis={[{ scaleType: 'band', data: [' '], }]}

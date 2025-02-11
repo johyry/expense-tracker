@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import { addCategory } from '../../reducers/categoryReducer'
 import Pie from '../Charts/Pie'
 import Barchart from '../Charts/Bar'
+import { cardStyle } from '../Styles/Card'
 
 const MonthlyOverview = ({ monthlyData }) => {
   const [openNewCategory, setOpenNewCategory] = useState(false)
@@ -28,10 +29,10 @@ const MonthlyOverview = ({ monthlyData }) => {
     <div>
       <Grid2 container spacing={2} sx={{ padding: 2 }}>
         <Grid2 item='true' size={{ xs: 12 }}>
-          <Card>
+          <Card sx={cardStyle}>
             <CardContent>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6">Monthly overview</Typography>
+                <Typography sx={{ fontWeight: 'bold' }} variant="h6">Monthly overview</Typography>
                 <Box display="flex" gap={1}>
                   {openNewCategory ? (
                     <>
@@ -61,8 +62,8 @@ const MonthlyOverview = ({ monthlyData }) => {
                   )}
                 </Box>
               </Box>
-              <Typography variant="body2">Total Cost: {monthlyData.totalMonthlyCosts} €</Typography>
-              <Typography variant="body2">Average: {monthlyData.averageMonthlyCost} €</Typography>
+              <Typography variant="body2">Total cost: {monthlyData.totalMonthlyCosts} €</Typography>
+              <Typography variant="body2">Average category cost: {monthlyData.averageMonthlyCost} €</Typography>
               <Typography variant="body2">Expenses: {monthlyData.amountOfMonthlyExpenses}</Typography>
               <Stack direction={{ xs: 'column', sm: 'row' }} width="100%" textAlign="center" justifyContent='space-evenly' spacing={2}>
                 <Box
@@ -71,7 +72,7 @@ const MonthlyOverview = ({ monthlyData }) => {
                   flexDirection="column"
                   alignItems="center"
                 >
-                  <Typography variant="body2">Total cost (€)</Typography>
+                  <Typography variant="body2">Total costs per category (€)</Typography>
                   <Barchart monthlyData={monthlyData} />
                 </Box>
                 <Box
