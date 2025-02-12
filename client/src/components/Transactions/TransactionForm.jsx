@@ -10,7 +10,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  IconButton
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -22,6 +23,8 @@ import { addTransaction, updateTransaction } from '../../reducers/transactionRed
 import { useParams } from 'react-router-dom'
 import transactionService from '../../services/transaction'
 import { useSelector } from 'react-redux'
+import AddIcon from '@mui/icons-material/Add'
+import { addCategory } from '../../reducers/categoryReducer'
 
 const TransactionForm = () => {
   const [receiver, setReceiver] = useState('')
@@ -33,6 +36,8 @@ const TransactionForm = () => {
   const [error, setError] = useState('')
   const [notification, setNotification] = useState('')
   const [transactionToEdit, setTransactionToEdit] = useState(null)
+  const [addingCategory, setAddingCategory] = useState(false)
+  const [newCategory, setNewCategory] = useState('')
 
   const dispatch = useDispatch()
   const { id } = useParams()
@@ -127,6 +132,13 @@ const TransactionForm = () => {
     }
   }
 
+  const handleAddCategory = () => {
+    if (newCategory.trim() === '') return
+    dispatch(addCategory({ name: newCategory }))
+    setAddingCategory(false)
+    setNewCategory('')
+  }
+
   const typeOptions = [
     'Cash',
     'Credit Card',
@@ -137,7 +149,7 @@ const TransactionForm = () => {
 
   return (
     <Container maxWidth="xs" sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-      <Paper elevation={10} sx={{ marginTop: 8, padding: 2, width: '100%' }}>
+      <Paper elevation={10} sx={{ marginTop: 8, padding: 2, width: '100%', borderRadius: '16px', boxShadow: 5 }}>
         <Typography component="h1" variant="h6" sx={{ mt: 2, mb: 2, textAlign: 'center' }}>
           {transactionToEdit && <>Edit Transaction</>}
           {!transactionToEdit && <>New Transaction</>}
@@ -201,8 +213,24 @@ const TransactionForm = () => {
                   {category.name}
                 </MenuItem>
               ))}
+              <MenuItem onClick={() => setAddingCategory(true)} value="">
+                <AddIcon sx={{ mr: 1 }} /> Add New Category
+              </MenuItem>
             </Select>
           </FormControl>
+          {addingCategory && (
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <TextField
+                fullWidth
+                label="New Category"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+              />
+              <IconButton onClick={handleAddCategory} sx={{ ml: 1 }}>
+                <AddIcon />
+              </IconButton>
+            </Box>
+          )}
           <TextField
             label="Comment"
             fullWidth
